@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Fund Name Vote</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0c0c0e;--surface:#141418;--surface2:#1a1a20;--border:#2a2a32;--accent:#c8a96e;--accent2:#7c9e8f;--text:#e8e4dc;--muted:#6b6872;--r1:#c8a96e;--r2:#a0b8af;--r3:#9b8fc0;--r4:#c07878;--r5:#8ab0c8;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 40% at 20% 20%,rgba(200,169,110,0.06) 0%,transparent 60%),radial-gradient(ellipse 50% 60% at 80% 80%,rgba(124,158,143,0.05) 0%,transparent 60%);pointer-events:none;z-index:0;}
+.container{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:60px 32px;}
+.header{text-align:center;margin-bottom:48px;}
+.eyebrow{font-size:10px;letter-spacing:0.3em;color:var(--accent);text-transform:uppercase;margin-bottom:16px;}
+h1{font-family:'Cormorant Garamond',serif;font-size:clamp(34px,6vw,54px);font-weight:300;letter-spacing:-0.02em;line-height:1.1;margin-bottom:8px;}
+h1 em{font-style:italic;color:var(--accent);}
+.subtitle{font-size:10px;color:var(--muted);letter-spacing:0.1em;}
+.rules-box{border:1px solid var(--border);border-radius:4px;padding:28px 32px;margin-bottom:40px;background:var(--surface);}
+.rules-title{font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:var(--accent);margin-bottom:16px;}
+.rules-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px 40px;}
+.rule-item{display:flex;gap:12px;align-items:flex-start;}
+.rule-num{font-size:18px;font-family:'Cormorant Garamond',serif;color:var(--accent);flex-shrink:0;line-height:1;}
+.rule-text{font-size:11px;color:var(--muted);line-height:1.7;}
+.rule-text strong{color:var(--text);display:block;margin-bottom:2px;}
+.rule-text .zh{display:block;margin-top:4px;opacity:0.75;}
+.phase-bar{display:flex;margin-bottom:40px;border:1px solid var(--border);border-radius:2px;overflow:hidden;}
+.phase-item{flex:1;padding:11px 12px;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);text-align:center;border-right:1px solid var(--border);}
+.phase-item:last-child{border-right:none;}
+.phase-item.active{background:var(--accent);color:var(--bg);font-weight:500;}
+.phase-item.done{color:var(--accent2);}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:28px 32px;margin-bottom:20px;}
+.card-title{font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:var(--accent);margin-bottom:18px;}
+.instructions{font-size:11px;color:var(--muted);line-height:1.8;margin-bottom:24px;padding:14px 18px;border-left:2px solid var(--accent);background:rgba(200,169,110,0.04);}
+.instructions strong{color:var(--accent);}
+.instructions .zh{display:block;margin-top:4px;opacity:0.8;}
+.deadline-bar{display:flex;gap:16px;margin-bottom:0;}
+.deadline-item{flex:1;padding:12px 16px;border:1px solid var(--border);border-radius:3px;background:var(--surface2);}
+.deadline-label{font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:4px;}
+.deadline-val{font-size:12px;color:var(--text);}
+.deadline-zh{font-size:10px;color:var(--muted);margin-top:2px;}
+.voter-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.voter-btn{background:transparent;border:1px solid var(--border);border-radius:3px;color:var(--text);font-family:'DM Mono',monospace;font-size:14px;padding:16px;cursor:pointer;transition:all 0.2s;text-align:center;position:relative;}
+.voter-btn:hover{border-color:var(--accent);color:var(--accent);}
+.voter-btn.voted{border-color:var(--accent2);color:var(--accent2);}
+.voter-btn.voted::after{content:'✓';position:absolute;top:6px;right:8px;font-size:10px;color:var(--accent2);}
+.voter-btn.selected{background:var(--accent);border-color:var(--accent);color:var(--bg);}
+.names-list{display:flex;flex-direction:column;gap:6px;}
+.name-card{border:1px solid var(--border);border-radius:3px;overflow:hidden;transition:border-color 0.2s;}
+.name-card.selected{border-color:var(--accent);}
+.name-header{display:flex;align-items:center;gap:14px;padding:14px 18px;cursor:pointer;transition:background 0.15s;user-select:none;}
+.name-header:hover{background:rgba(255,255,255,0.02);}
+.sel-badge{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;border:1px dashed var(--border);color:transparent;transition:all 0.2s;}
+.sel-badge.active{background:var(--accent);border-color:var(--accent);color:var(--bg);}
+.name-idx{font-size:10px;color:var(--muted);width:18px;flex-shrink:0;}
+.name-text{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;flex:1;}
+.expand-hint{font-size:9px;color:var(--muted);letter-spacing:0.08em;flex-shrink:0;opacity:0.6;}
+.expand-arrow{font-size:10px;color:var(--muted);flex-shrink:0;transition:transform 0.2s;margin-left:6px;}
+.expand-arrow.open{transform:rotate(180deg);}
+.rationale{display:none;padding:0 18px 16px 58px;border-top:1px solid var(--border);background:rgba(255,255,255,0.01);}
+.rationale.open{display:block;}
+.rationale-en{font-size:12px;color:var(--muted);line-height:1.8;margin-top:14px;margin-bottom:10px;}
+.rationale-zh{font-size:12px;color:var(--muted);line-height:1.8;opacity:0.85;padding-top:10px;border-top:1px solid var(--border);}
+.finalist-list{display:flex;flex-direction:column;gap:6px;}
+.finalist-card{border:1px solid var(--border);border-radius:3px;overflow:hidden;transition:border-color 0.2s;}
+.finalist-card.scored{border-color:var(--accent);}
+.finalist-header{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;user-select:none;}
+.finalist-header:hover{background:rgba(255,255,255,0.02);}
+.score-badge{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;border:1px dashed var(--border);color:var(--muted);transition:all 0.2s;flex-shrink:0;}
+.score-badge.s1{background:var(--r1);border-color:var(--r1);color:var(--bg);}
+.score-badge.s2{background:var(--r2);border-color:var(--r2);color:var(--bg);}
+.score-badge.s3{background:var(--r3);border-color:var(--r3);color:var(--bg);}
+.score-badge.s4{background:var(--r4);border-color:var(--r4);color:var(--bg);}
+.score-badge.s5{background:var(--r5);border-color:var(--r5);color:var(--bg);}
+.finalist-name{font-family:'Cormorant Garamond',serif;font-size:21px;flex:1;}
+.finalist-pts{font-size:10px;color:var(--muted);flex-shrink:0;}
+.finalist-pts.lit{color:var(--accent);}
+.btn{background:var(--accent);color:var(--bg);border:none;border-radius:2px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;padding:13px 28px;cursor:pointer;transition:all 0.2s;}
+.btn:hover{opacity:0.85;transform:translateY(-1px);}
+.btn:disabled{opacity:0.3;cursor:not-allowed;transform:none;}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:2px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;padding:13px 28px;cursor:pointer;transition:all 0.2s;}
+.btn-outline:hover{border-color:var(--accent2);color:var(--accent2);}
+.btn-row{display:flex;gap:12px;justify-content:flex-end;margin-top:24px;}
+.confirm-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:100;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+.confirm-box{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:40px;max-width:480px;width:90%;}
+.confirm-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;margin-bottom:8px;}
+.confirm-sub{font-size:11px;color:var(--muted);line-height:1.8;margin-bottom:6px;}
+.confirm-picks{margin:20px 0;display:flex;flex-direction:column;gap:8px;}
+.confirm-pick{display:flex;align-items:center;gap:12px;padding:10px 14px;border:1px solid var(--border);border-radius:2px;}
+.confirm-pick-name{font-family:'Cormorant Garamond',serif;font-size:17px;flex:1;}
+.confirm-pick-pts{font-size:10px;color:var(--muted);}
+.confirm-btns{display:flex;gap:12px;justify-content:flex-end;margin-top:24px;}
+.results-list{display:flex;flex-direction:column;gap:6px;}
+.result-row{display:flex;align-items:center;gap:14px;padding:13px 18px;border:1px solid var(--border);border-radius:2px;}
+.result-row.finalist{border-color:var(--accent);background:rgba(200,169,110,0.05);}
+.result-rank{font-size:11px;color:var(--muted);width:22px;text-align:right;flex-shrink:0;}
+.result-name{font-family:'Cormorant Garamond',serif;font-size:19px;flex:1;}
+.result-bar-wrap{width:100px;height:3px;background:var(--border);border-radius:2px;overflow:hidden;flex-shrink:0;}
+.result-bar{height:100%;background:var(--accent);border-radius:2px;}
+.result-score{font-size:11px;color:var(--accent);width:60px;text-align:right;flex-shrink:0;}
+.finalist-badge{font-size:9px;letter-spacing:0.12em;color:var(--accent);padding:2px 7px;border:1px solid var(--accent);border-radius:20px;flex-shrink:0;}
+.winners-grid{display:flex;flex-direction:column;gap:12px;margin:24px 0;}
+.winner-card{padding:28px 32px;border-radius:4px;text-align:center;}
+.winner-card.w1{border:1px solid var(--r1);background:rgba(200,169,110,0.07);}
+.winner-card.w2{border:1px solid var(--r2);background:rgba(160,184,175,0.06);}
+.winner-card.w3{border:1px solid var(--r3);background:rgba(155,143,192,0.06);}
+.winner-label{font-size:9px;letter-spacing:0.3em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+.winner-name{font-family:'Cormorant Garamond',serif;font-size:clamp(24px,4vw,38px);font-weight:300;letter-spacing:0.02em;margin-bottom:6px;}
+.winner-card.w1 .winner-name{color:var(--r1);}
+.winner-card.w2 .winner-name{color:var(--r2);}
+.winner-card.w3 .winner-name{color:var(--r3);}
+.winner-votes{font-size:10px;color:var(--muted);}
+.progress-status{display:flex;flex-direction:column;gap:8px;margin-bottom:24px;}
+.voter-row{display:flex;align-items:center;gap:12px;padding:10px 16px;border:1px solid var(--border);border-radius:3px;}
+.voter-name{font-size:13px;flex:1;}
+.voter-status{font-size:10px;}
+.voter-status.done{color:var(--accent2);}
+.voter-status.pending{color:var(--muted);}
+.admin-input{background:var(--surface2);border:1px solid var(--border);border-radius:3px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:12px 16px;width:100%;margin-bottom:12px;}
+.admin-input:focus{outline:none;border-color:var(--accent);}
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--accent);border-radius:3px;padding:12px 24px;font-size:11px;color:var(--accent);z-index:200;opacity:0;transition:opacity 0.3s;}
+.toast.show{opacity:1;}
+.divider{border:none;border-top:1px solid var(--border);margin:28px 0;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.fade-in{animation:fadeIn 0.35s ease forwards;}
+.loading{text-align:center;padding:60px;color:var(--muted);font-size:12px;}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+@media(max-width:600px){.container{padding:32px 16px;}.rules-grid{grid-template-columns:1fr;}.result-bar-wrap{display:none;}.deadline-bar{flex-direction:column;}.voter-grid{grid-template-columns:repeat(2,1fr);}}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="eyebrow">AI Fund Naming · 基金命名投票</div>
+    <h1>Choose the <em>Name</em></h1>
+    <div class="subtitle" style="margin-top:8px">17 candidates · 6 voters · 2 rounds &nbsp;·&nbsp; 候选名称17个 · 投票人6位 · 两轮制</div>
+  </div>
+
+  <div class="rules-box">
+    <div class="rules-title">Voting Rules · 投票规则</div>
+    <div class="rules-grid">
+      <div class="rule-item">
+        <div class="rule-num">1</div>
+        <div class="rule-text">
+          <strong>Round 1 · 初轮筛选</strong>
+          Each voter picks 5 favorites from 17 names. The 5 names chosen by the most voters advance.
+          <span class="zh">每人从17个名字中选出最喜欢的5个。被最多人选中的Top 5进入决赛。</span>
+        </div>
+      </div>
+      <div class="rule-item">
+        <div class="rule-num">2</div>
+        <div class="rule-text">
+          <strong>Round 2 · 决赛积分</strong>
+          Rank all 5 finalists. #1=5pts, #2=4pts, #3=3pts, #4=2pts, #5=1pt. Top 3 win.
+          <span class="zh">对Top 5全部排序。#1=5分到#5=1分，积分最高的3个胜出。</span>
+        </div>
+      </div>
+      <div class="rule-item">
+        <div class="rule-num">3</div>
+        <div class="rule-text">
+          <strong>Rationale · 查看理由</strong>
+          Click ▾ on any name to read its rationale in English and Chinese.
+          <span class="zh">点击名字右侧 ▾ 展开查看中英文解释，投票前建议仔细阅读。</span>
+        </div>
+      </div>
+      <div class="rule-item">
+        <div class="rule-num">4</div>
+        <div class="rule-text">
+          <strong>Deadlines · 截止时间（北京时间）</strong>
+          Round 1: Wednesday 18:00 CST · Round 2: Thursday 18:00 CST
+          <span class="zh">第一轮：周三18:00前 · 第二轮：周四18:00前</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase-bar">
+    <div class="phase-item" id="pt1">01 · Round 1</div>
+    <div class="phase-item" id="pt2">02 · Results</div>
+    <div class="phase-item" id="pt3">03 · Round 2</div>
+    <div class="phase-item" id="pt4">04 · Final</div>
+  </div>
+
+  <div id="app"><div class="loading">Loading · 加载中...</div></div>
+</div>
+
+<div class="confirm-overlay" id="confirmOverlay" style="display:none">
+  <div class="confirm-box">
+    <div class="confirm-title" id="confirmTitle"></div>
+    <div class="confirm-sub" id="confirmSub"></div>
+    <div class="confirm-picks" id="confirmPicks"></div>
+    <div class="confirm-btns">
+      <button class="btn-outline" onclick="closeConfirm()">← Go Back · 返回修改</button>
+      <button class="btn" id="confirmBtn" onclick="confirmSubmit()">Confirm · 确认提交</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── CONFIG ───────────────────────────────────────────────
+const SUPABASE_URL = 'https://tflhkqrsycvhsiztgyfu.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_2rmgxerxELnLTSEi-5POxw_FNB9tbmi';
+const ADMIN_PASS = 'fundvote2026';
+const VOTERS = ["John","Emma","Jack","Will","Nemo","Stella"];
+const R1_PICK = 5;
+const R2_PTS = [5,4,3,2,1];
+
+const FUNDS = [
+  {name:"Sea Cliff Ventures",en:"Sea Cliff is a neighborhood in San Francisco. (Soma Capital, South Park Commons, Presidio Ventures) Sea Cliff Ventures is a good name if the fund wants to signal frontier investing, SF roots, taste, discretion, and long-term conviction. It is less good if the brand wants to feel scrappy, populist, developer-native, or aggressively technical.",zh:"Sea Cliff 是旧金山的一个高档社区。如果基金希望传递前沿投资、扎根旧金山、品味独到、低调审慎和长期信念等气质，Sea Cliff Ventures 是一个好名字。但如果品牌想显得草根接地气、平民化、开发者原生或技术强硬派，这个名字则不太适合。"},
+  {name:"Theodolite",en:"A theodolite is a precision surveying instrument used to measure angles and map terrain. As a VC name, it gives you a strong narrative: We back founders before the map exists. Founders in AI, robotics, energy, infrastructure, autonomy, and hard tech generally respect precision. Theodolite feels engineered, not fluffy.",zh:"经纬仪是一种精密测量仪器，用于测量角度和绘制地形图。作为风险投资机构名称，它承载着一个有力的叙事：我们在地图还未存在之前，就已押注创始人。AI、机器人、能源、基础设施、自动驾驶和硬科技领域的创始人普遍认可精准这一品质。Theodolite给人工程师气质，而非虚浮之感。"},
+  {name:"Heliograph Ventures",en:"A heliograph is a device that sends signals using reflected sunlight. Great metaphor for signal, clarity, energy, and communication. It feels old-world technical but still optimistic. Capital for founders sending the first signal.",zh:"日光信号机是一种利用反射阳光传递信号的装置。这是一个极好的隐喻，象征着信号、清晰、能量与沟通。它散发着古典技术的气息，却依然充满乐观。这是为那些发出第一道信号的创始人准备的资本。"},
+  {name:"Pantograph Ventures",en:"A pantograph is a mechanical instrument for copying or scaling drawings to a different size. The metaphor is obvious but useful: helping founders scale without distortion. Capital that helps breakthroughs scale.",zh:"缩放仪是一种用于按比例复制或放大图纸的机械仪器。这个隐喻直白却实用：帮助创始人在不失真的前提下实现规模扩张。这是助力突破性成果走向规模化的资本。"},
+  {name:"Magnifica AI Ventures",en:"Inspired by Pope Leo's first encyclical, Magnifica Humanitas, we believe AI should serve humanity rather than concentrate power. Magnifica reflects our conviction that AI can expand human potential and elevate humanity at scale.",zh:"灵感源自教皇利澳的首篇通谕《伟大的人性》，我们相信AI应服务于人类，而非集中权力。Magnifica体现了我们的信念：AI能够在规模上拓展人类潜能、提升人类文明。"},
+  {name:"Inflect AI Ventures",en:"We back founders building the inflection points themselves — projects that don't get displaced by rapid advances in AI, but instead ride each wave to create enduring platforms, category-defining companies, and long-term defensible value.",zh:"我们押注那些自身就能创造拐点的项目——不会被AI的快速迭代所取代，而是每一次浪潮都是它们的助推器，最终沉淀为持久平台、定义品类的公司与长期可防御的核心价值。"},
+  {name:"Anchorix",en:"Anchor + Matrix. Identifies structural anchors in the AI matrix -- cross-cycle, deeply embedded, and stronger with every iteration.",zh:"Anchor（锚）+ Matrix（矩阵）的组合。识别AI矩阵中的结构性锚点——穿越周期、深度嵌入，并随每次迭代而愈发稳固。"},
+  {name:"Axiom",en:"Axiom, meaning a self-evident truth or foundational principle. Emphasizes a technology-driven investment philosophy.",zh:"公理，即不证自明的真理或基础原则。强调以技术为导向的投资逻辑。"},
+  {name:"Vector",en:"Vector -- simple and memorable, connected to AI and robotics concepts, emphasizing a focus on emerging technologies.",zh:"矢量，简单易记，与AI和机器人概念紧密相连，强调对新兴技术的专注。"},
+  {name:"Node",en:"A name that bridges Crypto and AI, emphasizing an infrastructure investment philosophy -- though relatively common.",zh:"Crypto与AI之间的中间名称，强调基础设施投资理念，但相对常见。"},
+  {name:"Bridgelink Capital",en:"Bridgelink Capital -- connecting China and the United States.",zh:"桥连资本，连接中国与美国。"},
+  {name:"Spanwise Capital",en:"Span conveys crossing, connecting, and extending boundaries -- capturing the fund's positioning as an investor that spans geographies, technologies, and industries. For an AI fund, Spanwise is apt because AI itself is not a single track but spans infrastructure, large models, application layers, enterprise workflows, and industrial implementation. The name has a quality feel in American business contexts -- not overly literal, yet conveying connection, expansion, and long-term vision. Spanwise Capital represents a fund connecting frontier AI innovation, global markets, and real-world industrial impact.",zh:"Span有跨越、连接、延展边界之意，体现基金跨越地域、技术和行业进行投资的定位。对于AI基金来说，Spanwise非常贴切，因为AI本身不是单一赛道，而是横跨基础设施、大模型、应用层、企业工作流和产业落地等多个层面。这个名字在美国商业语境里颇具质感，不过于直白，但仍传达连接、扩展和长期视野的含义。Spanwise Capital代表一家连接前沿AI创新、全球市场和现实产业影响力的投资基金。"},
+  {name:"Foresail Capital",en:"Foresail is the sail at the front of a ship, evoking the sense of moving forward, reading direction, and sailing with the wind. Maritime, frontier, and navigation metaphors resonate naturally in American culture.",zh:"Foresail是船前面的帆，有向前、判断方向、乘风而行的感觉。美国文化里maritime/frontier/navigation这些隐喻都比较自然。"},
+  {name:"Formrise Capital",en:"Formrise: Form represents shape, structure, and the way things are organized; Rise represents ascent, growth, and a new phase. Together, Formrise expresses a sense of new forms emerging and rising. It emphasizes AI's long-term reshaping of work, enterprise efficiency, education, healthcare, consumer behavior, financial services, and daily life. Compared to direct terms like AI, Neural, Agent, or Model, Formrise Capital is more restrained -- carrying the gravitas and long-termism that a fund should have.",zh:"Formrise：Form代表形态、结构和组织方式；Rise代表上升、成长和新阶段。组合在一起，Formrise表达新形态正在形成并上升的感觉。它强调AI对工作方式、企业效率、教育、医疗、消费、金融服务和日常生活的长期重塑。相比AI、Neural、Agent、Model这类词，Formrise Capital更克制，更像真正的美国本土风险投资品牌，有基金应有的稳重感和长期主义。"},
+  {name:"Logos Capital",en:"A fusion of East and West, resonating with the Gospel of John in Western tradition, and referenced as a fleet name in The Matrix.",zh:"东西方结合，契合西方约翰福音中道的概念，也是《黑客帝国》中舰队的名字。"},
+  {name:"Wallfacer Capital",en:"Meditation + facing the wall. Bets on things that others cannot understand during a founder's early, uncertain stage. A fund that sees through the confusion when no one else can.",zh:"冥想加面壁。在别人早期迷茫、看不明白的时候下注。一只能够在混沌中洞察真相的基金。"},
+  {name:"Taiyi Capital",en:"A fusion of East and West.",zh:"东西方结合。"}
+];
+
+// ── STATE ────────────────────────────────────────────────
+let currentVoter = null;
+let myR1Picks = [];
+let myR2Picks = [];
+let expanded = {};
+let allVotes = [];
+let appPhase = 1; // 1=select voter, 2=r1 vote, 3=r1 done, 4=r2 vote, 5=r2 done, 99=admin results
+let finalists = [];
+let pendingSubmit = null;
+let submitting = false;
+
+// ── SUPABASE API ─────────────────────────────────────────
+async function dbGet(table, filter='') {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${filter}&select=*`, {
+    headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`}
+  });
+  return res.json();
+}
+
+async function dbUpsert(table, data) {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
+    method:'POST',
+    headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates'},
+    body: JSON.stringify(data)
+  });
+  return res.ok;
+}
+
+// ── INIT ─────────────────────────────────────────────────
+async function init() {
+  allVotes = await dbGet('votes');
+  if (!Array.isArray(allVotes)) allVotes = [];
+  renderVoterSelect();
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2500);
+}
+
+// ── VOTER SELECT ─────────────────────────────────────────
+function renderVoterSelect() {
+  updateTabs(0);
+  const r1Done = allVotes.filter(v=>v.round===1).map(v=>v.voter);
+  const r2Done = allVotes.filter(v=>v.round===2).map(v=>v.voter);
+
+  const btns = VOTERS.map(v=>{
+    const hasR1 = r1Done.includes(v);
+    const hasR2 = r2Done.includes(v);
+    const mark = hasR2 ? '✓✓' : hasR1 ? '✓' : '';
+    return `<button class="voter-btn ${hasR1?'voted':''}" onclick="selectVoter('${v}')">${v}<span style="position:absolute;top:6px;right:8px;font-size:9px;color:var(--accent2)">${mark}</span></button>`;
+  }).join('');
+
+  const r1Count = r1Done.length;
+  const r2Count = r2Done.length;
+
+  document.getElementById('app').innerHTML = `<div class="fade-in">
+    <div class="card">
+      <div class="card-title">Select Your Name · 选择你的名字</div>
+      <div class="instructions">
+        Click your name to begin voting · 点击你的名字开始投票<br>
+        <span class="zh">✓ = Round 1 completed &nbsp;·&nbsp; ✓✓ = Both rounds completed</span>
+      </div>
+      <div class="voter-grid">${btns}</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Overall Progress · 整体进度</div>
+      <div style="font-size:11px;color:var(--muted);line-height:2">
+        Round 1: <span style="color:var(--accent)">${r1Count} / ${VOTERS.length}</span> completed · 已完成<br>
+        Round 2: <span style="color:var(--accent)">${r2Count} / ${VOTERS.length}</span> completed · 已完成
+      </div>
+      ${r1Count===VOTERS.length?`<div class="btn-row"><button class="btn-outline" onclick="showAdminPrompt()">Admin · 管理员查看结果</button></div>`:''}
+    </div>
+  </div>`;
+}
+
+function showAdminPrompt() {
+  document.getElementById('confirmTitle').textContent = 'Admin Access · 管理员入口';
+  document.getElementById('confirmSub').innerHTML = 'Enter admin password to view results and manage rounds.<br><span style="color:var(--muted);font-size:10px">输入管理员密码查看结果并管理投票轮次。</span>';
+  document.getElementById('confirmPicks').innerHTML = `<input class="admin-input" id="adminPassInput" type="password" placeholder="Password · 密码" onkeydown="if(event.key==='Enter')adminLogin()">`;
+  document.getElementById('confirmBtn').onclick = adminLogin;
+  document.getElementById('confirmBtn').textContent = 'Enter · 进入';
+  pendingSubmit = 'admin';
+  document.getElementById('confirmOverlay').style.display='flex';
+  setTimeout(()=>document.getElementById('adminPassInput').focus(),100);
+}
+
+function adminLogin() {
+  const pw = document.getElementById('adminPassInput').value;
+  if (pw === ADMIN_PASS) {
+    closeConfirm();
+    showAdminResults();
+  } else {
+    showToast('Wrong password · 密码错误');
+  }
+}
+
+async function selectVoter(name) {
+  currentVoter = name;
+  const myR1 = allVotes.find(v=>v.voter===name && v.round===1);
+  const myR2 = allVotes.find(v=>v.voter===name && v.round===2);
+  const r1AllDone = allVotes.filter(v=>v.round===1).length === VOTERS.length;
+
+  if (myR2) {
+    showToast(`${name}, you have completed both rounds! · 你已完成两轮投票！`);
+    return;
+  }
+  if (myR1 && !r1AllDone) {
+    appPhase = 3;
+    document.getElementById('app').innerHTML = `<div class="fade-in"><div class="card">
+      <div class="card-title">${name} · Round 1 Submitted · 已提交</div>
+      <div class="instructions">You have completed Round 1. Please wait for all members to finish before Round 2 begins.<br>
+      <span class="zh">你已完成第一轮投票。请等待所有成员完成后，管理员开启第二轮。</span></div>
+      <div class="btn-row"><button class="btn-outline" onclick="init()">← Back · 返回</button></div>
+    </div></div>`;
+    return;
+  }
+  if (myR1 && r1AllDone) {
+    // load finalists and go to r2
+    finalists = calcTop5(allVotes.filter(v=>v.round===1));
+    myR2Picks = [];
+    appPhase = 4;
+    renderR2();
+    return;
+  }
+  // go to r1
+  myR1Picks = [];
+  appPhase = 2;
+  renderR1();
+}
+
+// ── ROUND 1 ──────────────────────────────────────────────
+function renderR1() {
+  updateTabs(1);
+  const names = FUNDS.map((f,i)=>{
+    const isSel = myR1Picks.includes(f.name);
+    const exp = expanded[`r1-${i}`];
+    return `<div class="name-card ${isSel?'selected':''}">
+      <div class="name-header" onclick="handleR1Click(event,'${f.name.replace(/'/g,"\\'")}',${i})">
+        <div class="sel-badge ${isSel?'active':''}">✓</div>
+        <div class="name-idx">${String(i+1).padStart(2,'0')}</div>
+        <div class="name-text">${f.name}</div>
+        <div class="expand-hint">▾ rationale</div>
+        <div class="expand-arrow ${exp?'open':''}">▾</div>
+      </div>
+      <div class="rationale ${exp?'open':''}">
+        <div class="rationale-en">${f.en}</div>
+        <div class="rationale-zh">${f.zh}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('app').innerHTML = `<div class="fade-in">
+    <div class="card">
+      <div class="card-title">${currentVoter} · Round 1 — Choose 5 · 选出5个</div>
+      <div class="instructions">
+        Click a name to select/deselect · 点击名字选择或取消<br>
+        Click <strong>▾</strong> to read rationale · 点击 <strong>▾</strong> 查看理由<br>
+        <span class="zh">已选 <strong>${myR1Picks.length} / ${R1_PICK}</strong> 个 &nbsp;·&nbsp; Deadline: Wednesday 18:00 CST · 周三18:00前</span>
+      </div>
+      <div class="names-list">${names}</div>
+      <div class="btn-row">
+        <button class="btn-outline" onclick="init()">← Back</button>
+        <button class="btn" onclick="showConfirmR1()" ${myR1Picks.length===R1_PICK?'':'disabled'}>Review & Submit · 确认提交 →</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function handleR1Click(e, name, idx) {
+  const isArrow = e.target.classList.contains('expand-arrow') || e.target.classList.contains('expand-hint');
+  expanded[`r1-${idx}`] = !expanded[`r1-${idx}`];
+  if (!isArrow && !e.target.closest('.rationale')) {
+    const i = myR1Picks.indexOf(name);
+    if (i>=0) myR1Picks.splice(i,1);
+    else if (myR1Picks.length < R1_PICK) myR1Picks.push(name);
+  }
+  renderR1();
+}
+
+function showConfirmR1() {
+  document.getElementById('confirmTitle').textContent = `${currentVoter} — Confirm Vote · 确认投票`;
+  document.getElementById('confirmSub').innerHTML = `Please review your 5 selections. Once submitted, you cannot change your vote.<br><span style="color:var(--muted);font-size:10px">提交后无法修改，请仔细核对。</span>`;
+  document.getElementById('confirmPicks').innerHTML = myR1Picks.map((name,i)=>`
+    <div class="confirm-pick">
+      <div style="width:22px;height:22px;border-radius:50%;background:var(--accent);color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0">${i+1}</div>
+      <div class="confirm-pick-name">${name}</div>
+    </div>`).join('');
+  document.getElementById('confirmBtn').onclick = confirmSubmit;
+  document.getElementById('confirmBtn').textContent = 'Confirm · 确认提交';
+  pendingSubmit = 'r1';
+  document.getElementById('confirmOverlay').style.display='flex';
+}
+
+async function submitR1() {
+  if (submitting) return;
+  submitting = true;
+  document.getElementById('confirmBtn').disabled = true;
+  document.getElementById('confirmBtn').textContent = 'Saving...';
+  const ok = await dbUpsert('votes', {round:1, voter:currentVoter, picks:myR1Picks});
+  submitting = false;
+  closeConfirm();
+  if (ok) {
+    showToast('Round 1 submitted! · 第一轮已提交！');
+    await init();
+  } else {
+    showToast('Error saving. Try again. · 保存失败，请重试。');
+  }
+}
+
+// ── ROUND 2 ──────────────────────────────────────────────
+function renderR2() {
+  updateTabs(3);
+  const cards = finalists.map((name,i)=>{
+    const rank = myR2Picks.indexOf(name);
+    const exp = expanded[`r2-${i}`];
+    const fData = FUNDS.find(f=>f.name===name);
+    const badgeCls = rank>=0?`s${rank+1}`:'';
+    const badgeTxt = rank>=0?`#${rank+1}`:'·';
+    return `<div class="finalist-card ${rank>=0?'scored':''}">
+      <div class="finalist-header" onclick="handleR2Click(event,'${name.replace(/'/g,"\\'")}',${i})">
+        <div class="score-badge ${badgeCls}">${badgeTxt}</div>
+        <div class="finalist-name">${name}</div>
+        <div class="finalist-pts ${rank>=0?'lit':''}">${rank>=0?R2_PTS[rank]+' pts':''}</div>
+        <div class="expand-arrow ${exp?'open':''}">▾</div>
+      </div>
+      <div class="rationale ${exp?'open':''}">
+        <div class="rationale-en">${fData?fData.en:''}</div>
+        <div class="rationale-zh">${fData?fData.zh:''}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('app').innerHTML = `<div class="fade-in">
+    <div class="card">
+      <div class="card-title">${currentVoter} · Round 2 — Rank all 5 · 对5个决赛名字全部排序</div>
+      <div class="instructions">
+        Click names in order of preference · <strong>#1=5pts · #2=4pts · #3=3pts · #4=2pts · #5=1pt</strong><br>
+        Click <strong>▾</strong> to read rationale · 点击 <strong>▾</strong> 查看理由<br>
+        <span class="zh">已排序：<strong>${myR2Picks.length} / ${finalists.length}</strong> 个 &nbsp;·&nbsp; Deadline: Thursday 18:00 CST · 周四18:00前</span>
+      </div>
+      <div class="finalist-list">${cards}</div>
+      <div class="btn-row">
+        <button class="btn" onclick="showConfirmR2()" ${myR2Picks.length===finalists.length?'':'disabled'}>Review & Submit · 确认提交 →</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function handleR2Click(e, name, idx) {
+  const isArrow = e.target.classList.contains('expand-arrow');
+  expanded[`r2-${idx}`] = !expanded[`r2-${idx}`];
+  if (!isArrow && !e.target.closest('.rationale')) {
+    const i = myR2Picks.indexOf(name);
+    if (i>=0) myR2Picks.splice(i,1);
+    else if (myR2Picks.length < finalists.length) myR2Picks.push(name);
+  }
+  renderR2();
+}
+
+function showConfirmR2() {
+  const colors = ['var(--r1)','var(--r2)','var(--r3)','var(--r4)','var(--r5)'];
+  document.getElementById('confirmTitle').textContent = `${currentVoter} — Final Vote · 确认决赛投票`;
+  document.getElementById('confirmSub').innerHTML = `This is your final ranking. Once submitted, you cannot change it.<br><span style="color:var(--muted);font-size:10px">这是你的最终排序，提交后无法修改。</span>`;
+  document.getElementById('confirmPicks').innerHTML = myR2Picks.map((name,i)=>`
+    <div class="confirm-pick">
+      <div style="width:22px;height:22px;border-radius:50%;background:${colors[i]};color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0">${i+1}</div>
+      <div class="confirm-pick-name">${name}</div>
+      <div class="confirm-pick-pts">${R2_PTS[i]} pts</div>
+    </div>`).join('');
+  document.getElementById('confirmBtn').onclick = confirmSubmit;
+  document.getElementById('confirmBtn').textContent = 'Confirm · 确认提交';
+  pendingSubmit = 'r2';
+  document.getElementById('confirmOverlay').style.display='flex';
+}
+
+async function submitR2() {
+  if (submitting) return;
+  submitting = true;
+  document.getElementById('confirmBtn').disabled = true;
+  document.getElementById('confirmBtn').textContent = 'Saving...';
+  const ok = await dbUpsert('votes', {round:2, voter:currentVoter, picks:myR2Picks});
+  submitting = false;
+  closeConfirm();
+  if (ok) {
+    showToast('Round 2 submitted! · 第二轮已提交！');
+    await init();
+  } else {
+    showToast('Error saving. Try again. · 保存失败，请重试。');
+  }
+}
+
+// ── ADMIN RESULTS ─────────────────────────────────────────
+async function showAdminResults() {
+  allVotes = await dbGet('votes');
+  const r1Votes = allVotes.filter(v=>v.round===1);
+  const r2Votes = allVotes.filter(v=>v.round===2);
+  const r1Done = r1Votes.length;
+  const r2Done = r2Votes.length;
+  finalists = calcTop5(r1Votes);
+
+  // R1 counts
+  const counts = {};
+  FUNDS.forEach(f=>counts[f.name]=0);
+  r1Votes.forEach(v=>v.picks.forEach(n=>{ if(counts[n]!==undefined) counts[n]++; }));
+  const r1Ranked = Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([name,count])=>({name,count}));
+
+  // R2 scores
+  const scores = {};
+  finalists.forEach(f=>scores[f]=0);
+  r2Votes.forEach(v=>v.picks.forEach((name,i)=>{ if(scores[name]!==undefined) scores[name]+=R2_PTS[i]; }));
+  const r2Ranked = Object.entries(scores).sort((a,b)=>b[1]-a[1]).map(([name,score])=>({name,score}));
+
+  const r1Rows = r1Ranked.map((r,i)=>`
+    <div class="result-row ${i<5?'finalist':''}">
+      <div class="result-rank">${String(i+1).padStart(2,'0')}</div>
+      <div class="result-name">${r.name}</div>
+      <div class="result-bar-wrap"><div class="result-bar" style="width:${r1Ranked[0].count?r.count/r1Ranked[0].count*100:0}%"></div></div>
+      <div class="result-score">${r.count} vote${r.count!==1?'s':''}</div>
+      ${i<5?'<div class="finalist-badge">FINALIST</div>':''}
+    </div>`).join('');
+
+  const r2Section = r2Done > 0 ? `
+    <hr class="divider">
+    <div class="card-title">Round 2 Results · 决赛结果 (${r2Done}/${VOTERS.length})</div>
+    ${r2Done===VOTERS.length ? `
+    <div class="winners-grid">
+      ${r2Ranked.slice(0,3).map((r,i)=>`
+        <div class="winner-card w${i+1}">
+          <div class="winner-label">${['🏆 Winner · 第一名','Runner-up · 第二名','Third · 第三名'][i]}</div>
+          <div class="winner-name">${r.name}</div>
+          <div class="winner-votes">${r.score} points</div>
+        </div>`).join('')}
+    </div>` : ''}
+    <div class="results-list" style="margin-top:12px">
+      ${r2Ranked.map((r,i)=>`
+        <div class="result-row ${i<3?'finalist':''}">
+          <div class="result-rank">${String(i+1).padStart(2,'0')}</div>
+          <div class="result-name">${r.name}</div>
+          <div class="result-bar-wrap"><div class="result-bar" style="width:${r2Ranked[0].score?r.score/r2Ranked[0].score*100:0}%"></div></div>
+          <div class="result-score">${r.score} pts</div>
+          ${i<3?'<div class="finalist-badge">TOP 3</div>':''}
+        </div>`).join('')}
+    </div>` : '';
+
+  const canStartR2 = r1Done === VOTERS.length;
+
+  document.getElementById('app').innerHTML = `<div class="fade-in">
+    <div class="card">
+      <div class="card-title">Admin Panel · 管理员面板</div>
+      <div style="font-size:11px;color:var(--muted);line-height:2;margin-bottom:16px">
+        Round 1: <span style="color:var(--accent)">${r1Done} / ${VOTERS.length}</span> submitted<br>
+        Round 2: <span style="color:var(--accent)">${r2Done} / ${VOTERS.length}</span> submitted
+      </div>
+      <div class="card-title">Round 1 Vote Counts · 第一轮票数</div>
+      <div class="results-list">${r1Rows}</div>
+      ${r2Section}
+      <div class="btn-row" style="margin-top:24px">
+        <button class="btn-outline" onclick="init()">← Back · 返回</button>
+        ${canStartR2 && r2Done===0 ? `<button class="btn" onclick="openR2ForAll()">Open Round 2 · 开启第二轮</button>` : ''}
+      </div>
+    </div>
+  </div>`;
+  updateTabs(r2Done===VOTERS.length?4:r1Done===VOTERS.length?2:1);
+}
+
+async function openR2ForAll() {
+  showToast('Round 2 is now open! Share the link again. · 第二轮已开启！通知大家重新打开链接投票。');
+  await showAdminResults();
+}
+
+// ── HELPERS ──────────────────────────────────────────────
+function calcTop5(r1Votes) {
+  const counts = {};
+  FUNDS.forEach(f=>counts[f.name]=0);
+  r1Votes.forEach(v=>v.picks.forEach(n=>{ if(counts[n]!==undefined) counts[n]++; }));
+  return Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([name])=>name);
+}
+
+function updateTabs(activeIdx) {
+  // 0=select,1=r1,2=r1results,3=r2,4=final
+  const map = {1:[0],2:[0,1],3:[0,1,2],4:[0,1,2,3]};
+  ['pt1','pt2','pt3','pt4'].forEach((id,i)=>{
+    document.getElementById(id).className = 'phase-item' + (i+1===activeIdx?' active':i<(activeIdx-1)?' done':'');
+  });
+}
+
+function closeConfirm() {
+  document.getElementById('confirmOverlay').style.display='none';
+  pendingSubmit = null;
+}
+
+function confirmSubmit() {
+  if (pendingSubmit==='r1') submitR1();
+  else if (pendingSubmit==='r2') submitR2();
+  else if (pendingSubmit==='admin') adminLogin();
+}
+
+init();
+</script>
+</body>
+</html>
