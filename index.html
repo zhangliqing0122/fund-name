@@ -434,7 +434,7 @@ function handleR1Click(e, name, idx) {
 
 function showConfirmR1() {
   document.getElementById('confirmTitle').textContent = `${currentVoter} — Confirm Vote · 确认投票`;
-  document.getElementById('confirmSub').innerHTML = `Please review your 5 selections. Once submitted, you cannot change your vote.<br><span style="color:var(--muted);font-size:10px">提交后无法修改，请仔细核对。</span>`;
+  document.getElementById('confirmSub').innerHTML = `Please review your 5 selections. You can update your vote anytime before the deadline (Wednesday 18:00 CST).<br><span style="color:var(--muted);font-size:10px">截止时间（周三18:00北京时间）前可随时修改，请仔细核对。</span>`;
   document.getElementById('confirmPicks').innerHTML = myR1Picks.map((name,i)=>`
     <div class="confirm-pick">
       <div style="width:22px;height:22px;border-radius:50%;background:var(--accent);color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0">${i+1}</div>
@@ -515,7 +515,7 @@ function handleR2Click(e, name, idx) {
 function showConfirmR2() {
   const colors = ['var(--r1)','var(--r2)','var(--r3)','var(--r4)','var(--r5)'];
   document.getElementById('confirmTitle').textContent = `${currentVoter} — Final Vote · 确认决赛投票`;
-  document.getElementById('confirmSub').innerHTML = `This is your final ranking. Once submitted, you cannot change it.<br><span style="color:var(--muted);font-size:10px">这是你的最终排序，提交后无法修改。</span>`;
+  document.getElementById('confirmSub').innerHTML = `You can update your ranking anytime before the deadline (Friday 18:00 CST).<br><span style="color:var(--muted);font-size:10px">截止时间（周五18:00北京时间）前可随时修改。</span>`;
   document.getElementById('confirmPicks').innerHTML = myR2Picks.map((name,i)=>`
     <div class="confirm-pick">
       <div style="width:22px;height:22px;border-radius:50%;background:${colors[i]};color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0">${i+1}</div>
