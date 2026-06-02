@@ -21,9 +21,9 @@ h1 em{font-style:italic;color:var(--accent);}
 .rules-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px 40px;}
 .rule-item{display:flex;gap:12px;align-items:flex-start;}
 .rule-num{font-size:18px;font-family:'Cormorant Garamond',serif;color:var(--accent);flex-shrink:0;line-height:1;}
-.rule-text{font-size:11px;color:var(--muted);line-height:1.7;}
-.rule-text strong{color:var(--text);display:block;margin-bottom:2px;}
-.rule-text .zh{display:block;margin-top:4px;opacity:0.75;}
+.rule-text{font-size:13px;color:#b8b4ae;line-height:1.8;}
+.rule-text strong{color:#f0ece4;display:block;margin-bottom:4px;font-size:13px;}
+.rule-text .zh{display:block;margin-top:5px;opacity:0.9;color:#a8a4a0;}
 .phase-bar{display:flex;margin-bottom:40px;border:1px solid var(--border);border-radius:2px;overflow:hidden;}
 .phase-item{flex:1;padding:11px 12px;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);text-align:center;border-right:1px solid var(--border);}
 .phase-item:last-child{border-right:none;}
@@ -59,8 +59,8 @@ h1 em{font-style:italic;color:var(--accent);}
 .expand-arrow.open{transform:rotate(180deg);}
 .rationale{display:none;padding:0 18px 16px 58px;border-top:1px solid var(--border);background:rgba(255,255,255,0.01);}
 .rationale.open{display:block;}
-.rationale-en{font-size:12px;color:var(--muted);line-height:1.8;margin-top:14px;margin-bottom:10px;}
-.rationale-zh{font-size:12px;color:var(--muted);line-height:1.8;opacity:0.85;padding-top:10px;border-top:1px solid var(--border);}
+.rationale-en{font-size:13px;color:#c8c4bc;line-height:1.9;margin-top:14px;margin-bottom:10px;}
+.rationale-zh{font-size:13px;color:#b0aca6;line-height:1.9;opacity:1;padding-top:10px;border-top:1px solid var(--border);}
 .finalist-list{display:flex;flex-direction:column;gap:6px;}
 .finalist-card{border:1px solid var(--border);border-radius:3px;overflow:hidden;transition:border-color 0.2s;}
 .finalist-card.scored{border-color:var(--accent);}
@@ -208,6 +208,11 @@ const ADMIN_PASS = 'fundvote2026';
 const VOTERS = ["John","Emma","Jack","Will","Nemo","Stella"];
 const R1_PICK = 5;
 const R2_PTS = [5,4,3,2,1];
+// Deadlines: Wednesday & Thursday 18:00 CST (UTC+8)
+const R1_DEADLINE = new Date("2026-06-04T10:00:00Z"); // Wed 18:00 CST
+const R2_DEADLINE = new Date("2026-06-05T10:00:00Z"); // Thu 18:00 CST
+function beforeR1Deadline(){ return new Date() < R1_DEADLINE; }
+function beforeR2Deadline(){ return new Date() < R2_DEADLINE; }
 
 const FUNDS = [
   {name:"Sea Cliff Ventures",en:"Sea Cliff is a neighborhood in San Francisco. (Soma Capital, South Park Commons, Presidio Ventures) Sea Cliff Ventures is a good name if the fund wants to signal frontier investing, SF roots, taste, discretion, and long-term conviction. It is less good if the brand wants to feel scrappy, populist, developer-native, or aggressively technical.",zh:"Sea Cliff 是旧金山的一个高档社区。如果基金希望传递前沿投资、扎根旧金山、品味独到、低调审慎和长期信念等气质，Sea Cliff Ventures 是一个好名字。但如果品牌想显得草根接地气、平民化、开发者原生或技术强硬派，这个名字则不太适合。"},
@@ -334,22 +339,38 @@ async function selectVoter(name) {
   const myR2 = allVotes.find(v=>v.voter===name && v.round===2);
   const r1AllDone = allVotes.filter(v=>v.round===1).length === VOTERS.length;
 
+  // Round 2: allow re-vote before deadline
   if (myR2) {
-    showToast(`${name}, you have completed both rounds! · 你已完成两轮投票！`);
+    if (beforeR2Deadline()) {
+      // allow editing
+      finalists = calcTop5(allVotes.filter(v=>v.round===1));
+      myR2Picks = myR2.picks || [];
+      appPhase = 4;
+      renderR2();
+    } else {
+      showToast(`${name}, both rounds completed! · 你已完成两轮投票！`);
+    }
     return;
   }
   if (myR1 && !r1AllDone) {
-    appPhase = 3;
-    document.getElementById('app').innerHTML = `<div class="fade-in"><div class="card">
-      <div class="card-title">${name} · Round 1 Submitted · 已提交</div>
-      <div class="instructions">You have completed Round 1. Please wait for all members to finish before Round 2 begins.<br>
-      <span class="zh">你已完成第一轮投票。请等待所有成员完成后，管理员开启第二轮。</span></div>
-      <div class="btn-row"><button class="btn-outline" onclick="init()">← Back · 返回</button></div>
-    </div></div>`;
+    if (beforeR1Deadline()) {
+      // allow editing round 1
+      myR1Picks = myR1.picks || [];
+      appPhase = 2;
+      renderR1();
+      showToast('You can update your Round 1 picks · 可以修改第一轮选择');
+    } else {
+      appPhase = 3;
+      document.getElementById('app').innerHTML = `<div class="fade-in"><div class="card">
+        <div class="card-title">${name} · Round 1 Submitted · 已提交</div>
+        <div class="instructions">You have completed Round 1. Please wait for all members to finish before Round 2 begins.<br>
+        <span class="zh">你已完成第一轮投票。请等待所有成员完成后，管理员开启第二轮。</span></div>
+        <div class="btn-row"><button class="btn-outline" onclick="init()">← Back · 返回</button></div>
+      </div></div>`;
+    }
     return;
   }
   if (myR1 && r1AllDone) {
-    // load finalists and go to r2
     finalists = calcTop5(allVotes.filter(v=>v.round===1));
     myR2Picks = [];
     appPhase = 4;
@@ -434,7 +455,7 @@ async function submitR1() {
   submitting = false;
   closeConfirm();
   if (ok) {
-    showToast('Round 1 submitted! · 第一轮已提交！');
+    showToast('Round 1 saved! · 第一轮已保存！');
     await init();
   } else {
     showToast('Error saving. Try again. · 保存失败，请重试。');
@@ -516,7 +537,7 @@ async function submitR2() {
   submitting = false;
   closeConfirm();
   if (ok) {
-    showToast('Round 2 submitted! · 第二轮已提交！');
+    showToast('Round 2 saved! · 第二轮已保存！');
     await init();
   } else {
     showToast('Error saving. Try again. · 保存失败，请重试。');
