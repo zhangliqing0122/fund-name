@@ -341,33 +341,11 @@ async function selectVoter(name) {
 
   // Round 2: allow re-vote before deadline
   if (myR2) {
-    if (beforeR2Deadline()) {
-      // allow editing
-      finalists = calcTop5(allVotes.filter(v=>v.round===1));
-      myR2Picks = myR2.picks || [];
-      appPhase = 4;
-      renderR2();
-    } else {
-      showToast(`${name}, both rounds completed! · 你已完成两轮投票！`);
-    }
+    showR2Submitted();
     return;
   }
   if (myR1 && !r1AllDone) {
-    if (beforeR1Deadline()) {
-      // allow editing round 1
-      myR1Picks = myR1.picks || [];
-      appPhase = 2;
-      renderR1();
-      showToast('You can update your Round 1 picks · 可以修改第一轮选择');
-    } else {
-      appPhase = 3;
-      document.getElementById('app').innerHTML = `<div class="fade-in"><div class="card">
-        <div class="card-title">${name} · Round 1 Submitted · 已提交</div>
-        <div class="instructions">You have completed Round 1. Please wait for all members to finish before Round 2 begins.<br>
-        <span class="zh">你已完成第一轮投票。请等待所有成员完成后，管理员开启第二轮。</span></div>
-        <div class="btn-row"><button class="btn-outline" onclick="init()">← Back · 返回</button></div>
-      </div></div>`;
-    }
+    showR1Submitted();
     return;
   }
   if (myR1 && r1AllDone) {
@@ -456,7 +434,20 @@ async function submitR1() {
   closeConfirm();
   if (ok) {
     showToast('Round 1 saved! · 第一轮已保存！');
-    await init();
+    await // Auto-select voter from URL param
+const urlParams = new URLSearchParams(window.location.search);
+const urlVoter = urlParams.get('voter');
+if (urlVoter && VOTERS.includes(urlVoter)) {
+  // go straight to this voter's flow
+  async function initVoter() {
+    allVotes = await dbGet('votes');
+    if (!Array.isArray(allVotes)) allVotes = [];
+    await selectVoter(urlVoter);
+  }
+  initVoter();
+} else {
+  init();
+}
   } else {
     showToast('Error saving. Try again. · 保存失败，请重试。');
   }
@@ -538,7 +529,9 @@ async function submitR2() {
   closeConfirm();
   if (ok) {
     showToast('Round 2 saved! · 第二轮已保存！');
-    await init();
+    allVotes = await dbGet('votes');
+    if (!Array.isArray(allVotes)) allVotes = [];
+    showR2Submitted();
   } else {
     showToast('Error saving. Try again. · 保存失败，请重试。');
   }
