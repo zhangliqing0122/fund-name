@@ -169,8 +169,8 @@ h1 em{font-style:italic;color:var(--accent);}
         <div class="rule-num">4</div>
         <div class="rule-text">
           <strong>Deadlines · 截止时间（北京时间）</strong>
-          Round 1: Wednesday 18:00 CST · Round 2: Thursday 18:00 CST
-          <span class="zh">第一轮：周三18:00前 · 第二轮：周四18:00前</span>
+          Round 1: Wednesday 18:00 CST · Round 2: Friday 18:00 CST
+          <span class="zh">第一轮：周三18:00前 · 第二轮：周五18:00前</span>
         </div>
       </div>
     </div>
@@ -210,7 +210,7 @@ const R1_PICK = 5;
 const R2_PTS = [5,4,3,2,1];
 // Deadlines: Wednesday & Thursday 18:00 CST (UTC+8)
 const R1_DEADLINE = new Date("2026-06-04T10:00:00Z"); // Wed 18:00 CST
-const R2_DEADLINE = new Date("2026-06-05T10:00:00Z"); // Thu 18:00 CST
+const R2_DEADLINE = new Date("2026-06-06T10:00:00Z"); // Fri 18:00 CST
 function beforeR1Deadline(){ return new Date() < R1_DEADLINE; }
 function beforeR2Deadline(){ return new Date() < R2_DEADLINE; }
 
@@ -491,7 +491,7 @@ function renderR2() {
       <div class="instructions">
         Click names in order of preference · <strong>#1=5pts · #2=4pts · #3=3pts · #4=2pts · #5=1pt</strong><br>
         Click <strong>▾</strong> to read rationale · 点击 <strong>▾</strong> 查看理由<br>
-        <span class="zh">已排序：<strong>${myR2Picks.length} / ${finalists.length}</strong> 个 &nbsp;·&nbsp; Deadline: Thursday 18:00 CST · 周四18:00前</span>
+        <span class="zh">已排序：<strong>${myR2Picks.length} / ${finalists.length}</strong> 个 &nbsp;·&nbsp; Deadline: Friday 18:00 CST · 周五18:00前</span>
       </div>
       <div class="finalist-list">${cards}</div>
       <div class="btn-row">
