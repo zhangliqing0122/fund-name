@@ -434,20 +434,19 @@ async function submitR1() {
   closeConfirm();
   if (ok) {
     showToast('Round 1 saved! · 第一轮已保存！');
-    await // Auto-select voter from URL param
-const urlParams = new URLSearchParams(window.location.search);
-const urlVoter = urlParams.get('voter');
-if (urlVoter && VOTERS.includes(urlVoter)) {
-  // go straight to this voter's flow
-  async function initVoter() {
-    allVotes = await dbGet('votes');
-    if (!Array.isArray(allVotes)) allVotes = [];
+    await // Boot: check URL param then route
+async function boot() {
+  allVotes = await dbGet('votes');
+  if (!Array.isArray(allVotes)) allVotes = [];
+  const urlParams = new URLSearchParams(window.location.search);
+  const urlVoter = urlParams.get('voter');
+  if (urlVoter && VOTERS.includes(urlVoter)) {
     await selectVoter(urlVoter);
+  } else {
+    renderVoterSelect();
   }
-  initVoter();
-} else {
-  init();
 }
+boot();
   } else {
     showToast('Error saving. Try again. · 保存失败，请重试。');
   }
@@ -653,7 +652,6 @@ function confirmSubmit() {
   else if (pendingSubmit==='admin') adminLogin();
 }
 
-init();
 </script>
 </body>
 </html>
