@@ -302,7 +302,7 @@ function renderVoterSelect() {
         Round 1: <span style="color:var(--accent)">${r1Count} / ${VOTERS.length}</span> completed · 已完成<br>
         Round 2: <span style="color:var(--accent)">${r2Count} / ${VOTERS.length}</span> completed · 已完成
       </div>
-      ${r1Count===VOTERS.length?`<div class="btn-row"><button class="btn-outline" onclick="showAdminPrompt()">Admin · 管理员查看结果</button></div>`:''}
+      <div class="btn-row"><button class="btn-outline" onclick="showAdminPrompt()">Admin · 管理员查看结果</button></div>
     </div>
   </div>`;
 }
