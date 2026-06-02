@@ -22,7 +22,7 @@ h1 em{font-style:italic;color:var(--accent);}
 .rule-item{display:flex;gap:12px;align-items:flex-start;}
 .rule-num{font-size:18px;font-family:'Cormorant Garamond',serif;color:var(--accent);flex-shrink:0;line-height:1;}
 .rule-text{font-size:13px;color:#b8b4ae;line-height:1.8;}
-.rule-text strong{color:#f0ece4;display:block;margin-bottom:4px;font-size:13px;}
+.rule-text strong{color:#f0ece4;display:block;margin-bottom:4px;}
 .rule-text .zh{display:block;margin-top:5px;opacity:0.9;color:#a8a4a0;}
 .phase-bar{display:flex;margin-bottom:40px;border:1px solid var(--border);border-radius:2px;overflow:hidden;}
 .phase-item{flex:1;padding:11px 12px;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);text-align:center;border-right:1px solid var(--border);}
@@ -34,17 +34,10 @@ h1 em{font-style:italic;color:var(--accent);}
 .instructions{font-size:11px;color:var(--muted);line-height:1.8;margin-bottom:24px;padding:14px 18px;border-left:2px solid var(--accent);background:rgba(200,169,110,0.04);}
 .instructions strong{color:var(--accent);}
 .instructions .zh{display:block;margin-top:4px;opacity:0.8;}
-.deadline-bar{display:flex;gap:16px;margin-bottom:0;}
-.deadline-item{flex:1;padding:12px 16px;border:1px solid var(--border);border-radius:3px;background:var(--surface2);}
-.deadline-label{font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:4px;}
-.deadline-val{font-size:12px;color:var(--text);}
-.deadline-zh{font-size:10px;color:var(--muted);margin-top:2px;}
 .voter-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
 .voter-btn{background:transparent;border:1px solid var(--border);border-radius:3px;color:var(--text);font-family:'DM Mono',monospace;font-size:14px;padding:16px;cursor:pointer;transition:all 0.2s;text-align:center;position:relative;}
 .voter-btn:hover{border-color:var(--accent);color:var(--accent);}
 .voter-btn.voted{border-color:var(--accent2);color:var(--accent2);}
-.voter-btn.voted::after{content:'✓';position:absolute;top:6px;right:8px;font-size:10px;color:var(--accent2);}
-.voter-btn.selected{background:var(--accent);border-color:var(--accent);color:var(--bg);}
 .names-list{display:flex;flex-direction:column;gap:6px;}
 .name-card{border:1px solid var(--border);border-radius:3px;overflow:hidden;transition:border-color 0.2s;}
 .name-card.selected{border-color:var(--accent);}
@@ -60,7 +53,7 @@ h1 em{font-style:italic;color:var(--accent);}
 .rationale{display:none;padding:0 18px 16px 58px;border-top:1px solid var(--border);background:rgba(255,255,255,0.01);}
 .rationale.open{display:block;}
 .rationale-en{font-size:13px;color:#c8c4bc;line-height:1.9;margin-top:14px;margin-bottom:10px;}
-.rationale-zh{font-size:13px;color:#b0aca6;line-height:1.9;opacity:1;padding-top:10px;border-top:1px solid var(--border);}
+.rationale-zh{font-size:13px;color:#b0aca6;line-height:1.9;padding-top:10px;border-top:1px solid var(--border);}
 .finalist-list{display:flex;flex-direction:column;gap:6px;}
 .finalist-card{border:1px solid var(--border);border-radius:3px;overflow:hidden;transition:border-color 0.2s;}
 .finalist-card.scored{border-color:var(--accent);}
@@ -110,24 +103,20 @@ h1 em{font-style:italic;color:var(--accent);}
 .winner-card.w2 .winner-name{color:var(--r2);}
 .winner-card.w3 .winner-name{color:var(--r3);}
 .winner-votes{font-size:10px;color:var(--muted);}
-.progress-status{display:flex;flex-direction:column;gap:8px;margin-bottom:24px;}
-.voter-row{display:flex;align-items:center;gap:12px;padding:10px 16px;border:1px solid var(--border);border-radius:3px;}
-.voter-name{font-size:13px;flex:1;}
-.voter-status{font-size:10px;}
-.voter-status.done{color:var(--accent2);}
-.voter-status.pending{color:var(--muted);}
+.submitted-screen{text-align:center;padding:48px 32px;}
+.submitted-icon{font-size:56px;margin-bottom:20px;}
+.divider{border:none;border-top:1px solid var(--border);margin:28px 0;}
 .admin-input{background:var(--surface2);border:1px solid var(--border);border-radius:3px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:12px 16px;width:100%;margin-bottom:12px;}
 .admin-input:focus{outline:none;border-color:var(--accent);}
-.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--accent);border-radius:3px;padding:12px 24px;font-size:11px;color:var(--accent);z-index:200;opacity:0;transition:opacity 0.3s;}
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--accent);border-radius:3px;padding:12px 24px;font-size:11px;color:var(--accent);z-index:200;opacity:0;transition:opacity 0.3s;white-space:nowrap;}
 .toast.show{opacity:1;}
-.divider{border:none;border-top:1px solid var(--border);margin:28px 0;}
+.loading{text-align:center;padding:60px;color:var(--muted);font-size:12px;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
 .fade-in{animation:fadeIn 0.35s ease forwards;}
-.loading{text-align:center;padding:60px;color:var(--muted);font-size:12px;}
 ::-webkit-scrollbar{width:4px;}
 ::-webkit-scrollbar-track{background:var(--bg);}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
-@media(max-width:600px){.container{padding:32px 16px;}.rules-grid{grid-template-columns:1fr;}.result-bar-wrap{display:none;}.deadline-bar{flex-direction:column;}.voter-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:600px){.container{padding:32px 16px;}.rules-grid{grid-template-columns:1fr;}.result-bar-wrap{display:none;}.voter-grid{grid-template-columns:repeat(2,1fr);}}
 </style>
 </head>
 <body>
@@ -137,52 +126,21 @@ h1 em{font-style:italic;color:var(--accent);}
     <h1>Choose the <em>Name</em></h1>
     <div class="subtitle" style="margin-top:8px">17 candidates · 6 voters · 2 rounds &nbsp;·&nbsp; 候选名称17个 · 投票人6位 · 两轮制</div>
   </div>
-
   <div class="rules-box">
     <div class="rules-title">Voting Rules · 投票规则</div>
     <div class="rules-grid">
-      <div class="rule-item">
-        <div class="rule-num">1</div>
-        <div class="rule-text">
-          <strong>Round 1 · 初轮筛选</strong>
-          Each voter picks 5 favorites from 17 names. The 5 names chosen by the most voters advance.
-          <span class="zh">每人从17个名字中选出最喜欢的5个。被最多人选中的Top 5进入决赛。</span>
-        </div>
-      </div>
-      <div class="rule-item">
-        <div class="rule-num">2</div>
-        <div class="rule-text">
-          <strong>Round 2 · 决赛积分</strong>
-          Rank all 5 finalists. #1=5pts, #2=4pts, #3=3pts, #4=2pts, #5=1pt. Top 3 win.
-          <span class="zh">对Top 5全部排序。#1=5分到#5=1分，积分最高的3个胜出。</span>
-        </div>
-      </div>
-      <div class="rule-item">
-        <div class="rule-num">3</div>
-        <div class="rule-text">
-          <strong>Rationale · 查看理由</strong>
-          Click ▾ on any name to read its rationale in English and Chinese.
-          <span class="zh">点击名字右侧 ▾ 展开查看中英文解释，投票前建议仔细阅读。</span>
-        </div>
-      </div>
-      <div class="rule-item">
-        <div class="rule-num">4</div>
-        <div class="rule-text">
-          <strong>Deadlines · 截止时间（北京时间）</strong>
-          Round 1: Wednesday 18:00 CST · Round 2: Friday 18:00 CST
-          <span class="zh">第一轮：周三18:00前 · 第二轮：周五18:00前</span>
-        </div>
-      </div>
+      <div class="rule-item"><div class="rule-num">1</div><div class="rule-text"><strong>Round 1 · 初轮筛选</strong>Each voter picks 5 favorites from 17 names. The 5 names chosen by the most voters advance.<span class="zh">每人从17个名字中选出最喜欢的5个。被最多人选中的Top 5进入决赛。</span></div></div>
+      <div class="rule-item"><div class="rule-num">2</div><div class="rule-text"><strong>Round 2 · 决赛积分</strong>Rank all 5 finalists. #1=5pts, #2=4pts, #3=3pts, #4=2pts, #5=1pt. Top 3 win.<span class="zh">对Top 5全部排序。#1=5分到#5=1分，积分最高的3个胜出。</span></div></div>
+      <div class="rule-item"><div class="rule-num">3</div><div class="rule-text"><strong>Rationale · 查看理由</strong>Click ▾ on any name to read its rationale in English and Chinese.<span class="zh">点击名字右侧 ▾ 展开查看中英文解释，投票前建议仔细阅读。</span></div></div>
+      <div class="rule-item"><div class="rule-num">4</div><div class="rule-text"><strong>Deadlines · 截止时间（北京时间）</strong>Round 1: Wednesday 18:00 CST · Round 2: Friday 18:00 CST<span class="zh">第一轮：周三18:00前 · 第二轮：周五18:00前</span></div></div>
     </div>
   </div>
-
   <div class="phase-bar">
     <div class="phase-item" id="pt1">01 · Round 1</div>
     <div class="phase-item" id="pt2">02 · Results</div>
     <div class="phase-item" id="pt3">03 · Round 2</div>
     <div class="phase-item" id="pt4">04 · Final</div>
   </div>
-
   <div id="app"><div class="loading">Loading · 加载中...</div></div>
 </div>
 
@@ -193,26 +151,21 @@ h1 em{font-style:italic;color:var(--accent);}
     <div class="confirm-picks" id="confirmPicks"></div>
     <div class="confirm-btns">
       <button class="btn-outline" onclick="closeConfirm()">← Go Back · 返回修改</button>
-      <button class="btn" id="confirmBtn" onclick="confirmSubmit()">Confirm · 确认提交</button>
+      <button class="btn" id="confirmBtn">Confirm · 确认提交</button>
     </div>
   </div>
 </div>
-
 <div class="toast" id="toast"></div>
 
 <script>
-// ── CONFIG ───────────────────────────────────────────────
 const SUPABASE_URL = 'https://tflhkqrsycvhsiztgyfu.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRmbGhrcXJzeWN2aHNpenRneWZ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzNzI2NDEsImV4cCI6MjA5NTk0ODY0MX0.2DKhiPX1fnMF0LYRJ_B4vioyn6TzT2WCU_w1kDovylM';
 const ADMIN_PASS = 'fundvote2026';
 const VOTERS = ["John","Emma","Jack","Will","Nemo","Stella"];
 const R1_PICK = 5;
 const R2_PTS = [5,4,3,2,1];
-// Deadlines: Wednesday & Thursday 18:00 CST (UTC+8)
-const R1_DEADLINE = new Date("2026-06-04T10:00:00Z"); // Wed 18:00 CST
-const R2_DEADLINE = new Date("2026-06-06T10:00:00Z"); // Fri 18:00 CST
-function beforeR1Deadline(){ return new Date() < R1_DEADLINE; }
-function beforeR2Deadline(){ return new Date() < R2_DEADLINE; }
+const R1_DEADLINE = new Date("2026-06-04T10:00:00Z");
+const R2_DEADLINE = new Date("2026-06-06T10:00:00Z");
 
 const FUNDS = [
   {name:"Sea Cliff Ventures",en:"Sea Cliff is a neighborhood in San Francisco. (Soma Capital, South Park Commons, Presidio Ventures) Sea Cliff Ventures is a good name if the fund wants to signal frontier investing, SF roots, taste, discretion, and long-term conviction. It is less good if the brand wants to feel scrappy, populist, developer-native, or aggressively technical.",zh:"Sea Cliff 是旧金山的一个高档社区。如果基金希望传递前沿投资、扎根旧金山、品味独到、低调审慎和长期信念等气质，Sea Cliff Ventures 是一个好名字。但如果品牌想显得草根接地气、平民化、开发者原生或技术强硬派，这个名字则不太适合。"},
@@ -234,27 +187,28 @@ const FUNDS = [
   {name:"Taiyi Capital",en:"A fusion of East and West.",zh:"东西方结合。"}
 ];
 
-// ── STATE ────────────────────────────────────────────────
 let currentVoter = null;
 let myR1Picks = [];
 let myR2Picks = [];
 let expanded = {};
 let allVotes = [];
-let appPhase = 1; // 1=select voter, 2=r1 vote, 3=r1 done, 4=r2 vote, 5=r2 done, 99=admin results
 let finalists = [];
 let pendingSubmit = null;
 let submitting = false;
 
-// ── SUPABASE API ─────────────────────────────────────────
-async function dbGet(table, filter='') {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${filter}&select=*`, {
-    headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`}
-  });
-  return res.json();
+// ── DB ───────────────────────────────────────────────────
+async function dbGet() {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/votes?select=*`, {
+      headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`}
+    });
+    const data = await res.json();
+    return Array.isArray(data) ? data : [];
+  } catch(e) { return []; }
 }
 
-async function dbUpsert(table, data) {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
+async function dbUpsert(data) {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/votes`, {
     method:'POST',
     headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates'},
     body: JSON.stringify(data)
@@ -262,113 +216,170 @@ async function dbUpsert(table, data) {
   return res.ok;
 }
 
-// ── INIT ─────────────────────────────────────────────────
-async function init() {
-  allVotes = await dbGet('votes');
-  if (!Array.isArray(allVotes)) allVotes = [];
-  renderVoterSelect();
+// ── HELPERS ──────────────────────────────────────────────
+function dedup(votes) {
+  const map = {};
+  votes.forEach(v => { map[v.voter] = v; });
+  return Object.values(map);
+}
+
+function calcTop5(r1Votes) {
+  const unique = dedup(r1Votes);
+  const counts = {};
+  FUNDS.forEach(f => counts[f.name] = 0);
+  unique.forEach(v => v.picks.forEach(n => { if (counts[n] !== undefined) counts[n]++; }));
+  return Object.entries(counts).sort((a,b) => b[1]-a[1]).slice(0,5).map(([name]) => name);
+}
+
+function updateTabs(active) {
+  ['pt1','pt2','pt3','pt4'].forEach((id,i) => {
+    document.getElementById(id).className = 'phase-item' + (i+1===active?' active':i+1<active?' done':'');
+  });
 }
 
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'), 2500);
+  setTimeout(() => t.classList.remove('show'), 2800);
 }
 
-// ── VOTER SELECT ─────────────────────────────────────────
-function renderVoterSelect() {
+function closeConfirm() {
+  document.getElementById('confirmOverlay').style.display = 'none';
+  pendingSubmit = null;
+}
+
+function confirmSubmit() {
+  if (pendingSubmit === 'r1') submitR1();
+  else if (pendingSubmit === 'r2') submitR2();
+  else if (pendingSubmit === 'admin') adminLogin();
+}
+
+// ── BOOT ─────────────────────────────────────────────────
+async function boot() {
+  document.getElementById('app').innerHTML = '<div class="loading">Loading · 加载中...</div>';
+  allVotes = await dbGet();
+  const urlVoter = new URLSearchParams(window.location.search).get('voter');
+  if (urlVoter && VOTERS.includes(urlVoter)) {
+    await selectVoter(urlVoter);
+  } else {
+    renderHome();
+  }
+}
+
+// ── HOME (no URL param) ───────────────────────────────────
+function renderHome() {
   updateTabs(0);
   const r1Done = [...new Set(allVotes.filter(v=>v.round===1).map(v=>v.voter))];
   const r2Done = [...new Set(allVotes.filter(v=>v.round===2).map(v=>v.voter))];
 
-  const btns = VOTERS.map(v=>{
-    const hasR1 = r1Done.includes(v);
-    const hasR2 = r2Done.includes(v);
-    const mark = hasR2 ? '✓✓' : hasR1 ? '✓' : '';
-    return `<button class="voter-btn ${hasR1?'voted':''}" onclick="selectVoter('${v}')">${v}<span style="position:absolute;top:6px;right:8px;font-size:9px;color:var(--accent2)">${mark}</span></button>`;
+  const btns = VOTERS.map(v => {
+    const has = r1Done.includes(v);
+    const has2 = r2Done.includes(v);
+    const mark = has2 ? ' ✓✓' : has ? ' ✓' : '';
+    return `<button class="voter-btn ${has?'voted':''}" onclick="goVoter('${v}')">${v}${mark}</button>`;
   }).join('');
-
-  const r1Count = r1Done.length;
-  const r2Count = r2Done.length;
 
   document.getElementById('app').innerHTML = `<div class="fade-in">
     <div class="card">
       <div class="card-title">Select Your Name · 选择你的名字</div>
-      <div class="instructions">
-        Click your name to begin voting · 点击你的名字开始投票<br>
-        <span class="zh">✓ = Round 1 completed &nbsp;·&nbsp; ✓✓ = Both rounds completed</span>
-      </div>
+      <div class="instructions">Click your name to begin · 点击你的名字开始投票<br>
+      <span class="zh">✓ = Round 1 done &nbsp;·&nbsp; ✓✓ = Both rounds done</span></div>
       <div class="voter-grid">${btns}</div>
     </div>
     <div class="card">
       <div class="card-title">Overall Progress · 整体进度</div>
-      <div style="font-size:11px;color:var(--muted);line-height:2">
-        Round 1: <span style="color:var(--accent)">${r1Count} / ${VOTERS.length}</span> completed · 已完成<br>
-        Round 2: <span style="color:var(--accent)">${r2Count} / ${VOTERS.length}</span> completed · 已完成
+      <div style="font-size:13px;color:#b8b4ae;line-height:2.2">
+        Round 1: <span style="color:var(--accent);font-weight:500">${r1Done.length} / ${VOTERS.length}</span> completed · 已完成<br>
+        Round 2: <span style="color:var(--accent);font-weight:500">${r2Done.length} / ${VOTERS.length}</span> completed · 已完成
       </div>
       <div class="btn-row"><button class="btn-outline" onclick="showAdminPrompt()">Admin · 管理员查看结果</button></div>
     </div>
   </div>`;
 }
 
-function showAdminPrompt() {
-  document.getElementById('confirmTitle').textContent = 'Admin Access · 管理员入口';
-  document.getElementById('confirmSub').innerHTML = 'Enter admin password to view results and manage rounds.<br><span style="color:var(--muted);font-size:10px">输入管理员密码查看结果并管理投票轮次。</span>';
-  document.getElementById('confirmPicks').innerHTML = `<input class="admin-input" id="adminPassInput" type="password" placeholder="Password · 密码" onkeydown="if(event.key==='Enter')adminLogin()">`;
-  document.getElementById('confirmBtn').onclick = adminLogin;
-  document.getElementById('confirmBtn').textContent = 'Enter · 进入';
-  pendingSubmit = 'admin';
-  document.getElementById('confirmOverlay').style.display='flex';
-  setTimeout(()=>document.getElementById('adminPassInput').focus(),100);
+async function goVoter(name) {
+  currentVoter = name;
+  allVotes = await dbGet();
+  await selectVoter(name);
 }
 
-function adminLogin() {
-  const pw = document.getElementById('adminPassInput').value;
-  if (pw === ADMIN_PASS) {
-    closeConfirm();
-    showAdminResults();
-  } else {
-    showToast('Wrong password · 密码错误');
-  }
-}
-
+// ── SELECT VOTER FLOW ─────────────────────────────────────
 async function selectVoter(name) {
   currentVoter = name;
-  const myR1 = allVotes.find(v=>v.voter===name && v.round===1);
-  const myR2 = allVotes.find(v=>v.voter===name && v.round===2);
+  const myR1 = allVotes.find(v => v.voter===name && v.round===1);
+  const myR2 = allVotes.find(v => v.voter===name && v.round===2);
   const r1AllDone = [...new Set(allVotes.filter(v=>v.round===1).map(v=>v.voter))].length === VOTERS.length;
 
-  // Round 2: allow re-vote before deadline
   if (myR2) {
-    showR2Submitted();
-    return;
-  }
-  if (myR1 && !r1AllDone) {
-    showR1Submitted();
+    showSubmitted(2);
     return;
   }
   if (myR1 && r1AllDone) {
-    finalists = calcTop5(allVotes.filter(v=>v.round===1));
+    finalists = calcTop5(allVotes.filter(v => v.round===1));
     myR2Picks = [];
-    appPhase = 4;
     renderR2();
     return;
   }
-  // go to r1
+  if (myR1) {
+    showSubmitted(1);
+    return;
+  }
   myR1Picks = [];
-  appPhase = 2;
   renderR1();
+}
+
+// ── SUBMITTED SCREEN ──────────────────────────────────────
+function showSubmitted(round) {
+  updateTabs(round === 1 ? 1 : 3);
+  const r1AllDone = [...new Set(allVotes.filter(v=>v.round===1).map(v=>v.voter))].length === VOTERS.length;
+  const deadline = round === 1 ? 'Wednesday 18:00 CST · 周三18:00前' : 'Friday 18:00 CST · 周五18:00前';
+  const canEdit = round === 1 ? new Date() < R1_DEADLINE : new Date() < R2_DEADLINE;
+  const r2Ready = round === 1 && r1AllDone;
+
+  document.getElementById('app').innerHTML = `<div class="fade-in">
+    <div class="card submitted-screen">
+      <div class="submitted-icon">✓</div>
+      <div class="card-title" style="justify-content:center;text-align:center">${currentVoter} · Round ${round} Submitted · 已提交</div>
+      <div style="font-size:13px;color:#b8b4ae;line-height:1.9;margin:16px 0;text-align:center">
+        Your vote has been saved · 你的投票已保存<br>
+        ${canEdit ? `<span style="color:var(--accent)">Can update before ${deadline}</span>` : `<span style="color:var(--muted)">Deadline has passed · 截止时间已过</span>`}
+      </div>
+      ${r2Ready ? `<div style="font-size:12px;color:var(--accent2);margin:12px 0;text-align:center">🎉 All members voted! Round 2 is now open · 所有人已投票，第二轮已开启</div>` : ''}
+      <div class="btn-row" style="justify-content:center;gap:16px;margin-top:24px">
+        ${canEdit ? `<button class="btn-outline" onclick="editVote(${round})">✎ Edit My Vote · 修改我的选择</button>` : ''}
+        ${r2Ready ? `<button class="btn" onclick="goToR2()">Start Round 2 · 开始第二轮 →</button>` : ''}
+      </div>
+    </div>
+  </div>`;
+}
+
+function editVote(round) {
+  if (round === 1) {
+    const myR1 = allVotes.find(v => v.voter===currentVoter && v.round===1);
+    myR1Picks = myR1 ? [...myR1.picks] : [];
+    renderR1();
+  } else {
+    const myR2 = allVotes.find(v => v.voter===currentVoter && v.round===2);
+    myR2Picks = myR2 ? [...myR2.picks] : [];
+    renderR2();
+  }
+}
+
+function goToR2() {
+  finalists = calcTop5(allVotes.filter(v => v.round===1));
+  myR2Picks = [];
+  renderR2();
 }
 
 // ── ROUND 1 ──────────────────────────────────────────────
 function renderR1() {
   updateTabs(1);
-  const names = FUNDS.map((f,i)=>{
+  const names = FUNDS.map((f,i) => {
     const isSel = myR1Picks.includes(f.name);
     const exp = expanded[`r1-${i}`];
     return `<div class="name-card ${isSel?'selected':''}">
-      <div class="name-header" onclick="handleR1Click(event,'${f.name.replace(/'/g,"\\'")}',${i})">
+      <div class="name-header" onclick="handleR1Click(event,'${f.name.replace(/'/g,"\\'").replace(/"/g,'&quot;')}',${i})">
         <div class="sel-badge ${isSel?'active':''}">✓</div>
         <div class="name-idx">${String(i+1).padStart(2,'0')}</div>
         <div class="name-text">${f.name}</div>
@@ -392,7 +403,6 @@ function renderR1() {
       </div>
       <div class="names-list">${names}</div>
       <div class="btn-row">
-        <button class="btn-outline" onclick="init()">← Back</button>
         <button class="btn" onclick="showConfirmR1()" ${myR1Picks.length===R1_PICK?'':'disabled'}>Review & Submit · 确认提交 →</button>
       </div>
     </div>
@@ -404,7 +414,7 @@ function handleR1Click(e, name, idx) {
   expanded[`r1-${idx}`] = !expanded[`r1-${idx}`];
   if (!isArrow && !e.target.closest('.rationale')) {
     const i = myR1Picks.indexOf(name);
-    if (i>=0) myR1Picks.splice(i,1);
+    if (i >= 0) myR1Picks.splice(i, 1);
     else if (myR1Picks.length < R1_PICK) myR1Picks.push(name);
   }
   renderR1();
@@ -412,16 +422,17 @@ function handleR1Click(e, name, idx) {
 
 function showConfirmR1() {
   document.getElementById('confirmTitle').textContent = `${currentVoter} — Confirm Vote · 确认投票`;
-  document.getElementById('confirmSub').innerHTML = `Please review your 5 selections. You can update your vote anytime before the deadline (Wednesday 18:00 CST).<br><span style="color:var(--muted);font-size:10px">截止时间（周三18:00北京时间）前可随时修改，请仔细核对。</span>`;
-  document.getElementById('confirmPicks').innerHTML = myR1Picks.map((name,i)=>`
+  document.getElementById('confirmSub').innerHTML = `You can update anytime before Wednesday 18:00 CST.<br><span style="color:var(--muted);font-size:10px">截止时间（周三18:00北京时间）前可随时修改。</span>`;
+  document.getElementById('confirmPicks').innerHTML = myR1Picks.map((name,i) => `
     <div class="confirm-pick">
       <div style="width:22px;height:22px;border-radius:50%;background:var(--accent);color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0">${i+1}</div>
       <div class="confirm-pick-name">${name}</div>
     </div>`).join('');
   document.getElementById('confirmBtn').onclick = confirmSubmit;
   document.getElementById('confirmBtn').textContent = 'Confirm · 确认提交';
+  document.getElementById('confirmBtn').disabled = false;
   pendingSubmit = 'r1';
-  document.getElementById('confirmOverlay').style.display='flex';
+  document.getElementById('confirmOverlay').style.display = 'flex';
 }
 
 async function submitR1() {
@@ -429,42 +440,28 @@ async function submitR1() {
   submitting = true;
   document.getElementById('confirmBtn').disabled = true;
   document.getElementById('confirmBtn').textContent = 'Saving...';
-  const ok = await dbUpsert('votes', {round:1, voter:currentVoter, picks:myR1Picks});
+  const ok = await dbUpsert({round:1, voter:currentVoter, picks:myR1Picks});
   submitting = false;
   closeConfirm();
   if (ok) {
-    showToast('Round 1 saved! · 第一轮已保存！');
-    await // Auto-select voter from URL param
-const urlParams = new URLSearchParams(window.location.search);
-const urlVoter = urlParams.get('voter');
-if (urlVoter && VOTERS.includes(urlVoter)) {
-  // go straight to this voter's flow
-  async function initVoter() {
-    allVotes = await dbGet('votes');
-    if (!Array.isArray(allVotes)) allVotes = [];
-    await selectVoter(urlVoter);
-  }
-  initVoter();
-} else {
-  init();
-}
+    allVotes = await dbGet();
+    showToast('Saved! · 已保存');
+    showSubmitted(1);
   } else {
-    showToast('Error saving. Try again. · 保存失败，请重试。');
+    showToast('Error. Try again. · 保存失败，请重试');
   }
 }
 
 // ── ROUND 2 ──────────────────────────────────────────────
 function renderR2() {
   updateTabs(3);
-  const cards = finalists.map((name,i)=>{
+  const cards = finalists.map((name,i) => {
     const rank = myR2Picks.indexOf(name);
     const exp = expanded[`r2-${i}`];
-    const fData = FUNDS.find(f=>f.name===name);
-    const badgeCls = rank>=0?`s${rank+1}`:'';
-    const badgeTxt = rank>=0?`#${rank+1}`:'·';
+    const fData = FUNDS.find(f => f.name===name);
     return `<div class="finalist-card ${rank>=0?'scored':''}">
-      <div class="finalist-header" onclick="handleR2Click(event,'${name.replace(/'/g,"\\'")}',${i})">
-        <div class="score-badge ${badgeCls}">${badgeTxt}</div>
+      <div class="finalist-header" onclick="handleR2Click(event,'${name.replace(/'/g,"\\'").replace(/"/g,'&quot;')}',${i})">
+        <div class="score-badge ${rank>=0?'s'+(rank+1):''}"><span>${rank>=0?'#'+(rank+1):'·'}</span></div>
         <div class="finalist-name">${name}</div>
         <div class="finalist-pts ${rank>=0?'lit':''}">${rank>=0?R2_PTS[rank]+' pts':''}</div>
         <div class="expand-arrow ${exp?'open':''}">▾</div>
@@ -481,7 +478,7 @@ function renderR2() {
       <div class="card-title">${currentVoter} · Round 2 — Rank all 5 · 对5个决赛名字全部排序</div>
       <div class="instructions">
         Click names in order of preference · <strong>#1=5pts · #2=4pts · #3=3pts · #4=2pts · #5=1pt</strong><br>
-        Click <strong>▾</strong> to read rationale · 点击 <strong>▾</strong> 查看理由<br>
+        Click <strong>▾</strong> to read rationale · 查看理由<br>
         <span class="zh">已排序：<strong>${myR2Picks.length} / ${finalists.length}</strong> 个 &nbsp;·&nbsp; Deadline: Friday 18:00 CST · 周五18:00前</span>
       </div>
       <div class="finalist-list">${cards}</div>
@@ -497,7 +494,7 @@ function handleR2Click(e, name, idx) {
   expanded[`r2-${idx}`] = !expanded[`r2-${idx}`];
   if (!isArrow && !e.target.closest('.rationale')) {
     const i = myR2Picks.indexOf(name);
-    if (i>=0) myR2Picks.splice(i,1);
+    if (i >= 0) myR2Picks.splice(i, 1);
     else if (myR2Picks.length < finalists.length) myR2Picks.push(name);
   }
   renderR2();
@@ -506,8 +503,8 @@ function handleR2Click(e, name, idx) {
 function showConfirmR2() {
   const colors = ['var(--r1)','var(--r2)','var(--r3)','var(--r4)','var(--r5)'];
   document.getElementById('confirmTitle').textContent = `${currentVoter} — Final Vote · 确认决赛投票`;
-  document.getElementById('confirmSub').innerHTML = `You can update your ranking anytime before the deadline (Friday 18:00 CST).<br><span style="color:var(--muted);font-size:10px">截止时间（周五18:00北京时间）前可随时修改。</span>`;
-  document.getElementById('confirmPicks').innerHTML = myR2Picks.map((name,i)=>`
+  document.getElementById('confirmSub').innerHTML = `You can update anytime before Friday 18:00 CST.<br><span style="color:var(--muted);font-size:10px">截止时间（周五18:00北京时间）前可随时修改。</span>`;
+  document.getElementById('confirmPicks').innerHTML = myR2Picks.map((name,i) => `
     <div class="confirm-pick">
       <div style="width:22px;height:22px;border-radius:50%;background:${colors[i]};color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0">${i+1}</div>
       <div class="confirm-pick-name">${name}</div>
@@ -515,8 +512,9 @@ function showConfirmR2() {
     </div>`).join('');
   document.getElementById('confirmBtn').onclick = confirmSubmit;
   document.getElementById('confirmBtn').textContent = 'Confirm · 确认提交';
+  document.getElementById('confirmBtn').disabled = false;
   pendingSubmit = 'r2';
-  document.getElementById('confirmOverlay').style.display='flex';
+  document.getElementById('confirmOverlay').style.display = 'flex';
 }
 
 async function submitR2() {
@@ -524,47 +522,54 @@ async function submitR2() {
   submitting = true;
   document.getElementById('confirmBtn').disabled = true;
   document.getElementById('confirmBtn').textContent = 'Saving...';
-  const ok = await dbUpsert('votes', {round:2, voter:currentVoter, picks:myR2Picks});
+  const ok = await dbUpsert({round:2, voter:currentVoter, picks:myR2Picks});
   submitting = false;
   closeConfirm();
   if (ok) {
-    showToast('Round 2 saved! · 第二轮已保存！');
-    allVotes = await dbGet('votes');
-    if (!Array.isArray(allVotes)) allVotes = [];
-    showR2Submitted();
+    allVotes = await dbGet();
+    showToast('Saved! · 已保存');
+    showSubmitted(2);
   } else {
-    showToast('Error saving. Try again. · 保存失败，请重试。');
+    showToast('Error. Try again. · 保存失败，请重试');
   }
 }
 
-// ── ADMIN RESULTS ─────────────────────────────────────────
+// ── ADMIN ─────────────────────────────────────────────────
+function showAdminPrompt() {
+  document.getElementById('confirmTitle').textContent = 'Admin Access · 管理员入口';
+  document.getElementById('confirmSub').innerHTML = 'Enter password to view results · 输入密码查看投票结果';
+  document.getElementById('confirmPicks').innerHTML = `<input class="admin-input" id="adminPw" type="password" placeholder="Password · 密码" onkeydown="if(event.key==='Enter')confirmSubmit()">`;
+  document.getElementById('confirmBtn').onclick = confirmSubmit;
+  document.getElementById('confirmBtn').textContent = 'Enter · 进入';
+  document.getElementById('confirmBtn').disabled = false;
+  pendingSubmit = 'admin';
+  document.getElementById('confirmOverlay').style.display = 'flex';
+  setTimeout(() => { const el = document.getElementById('adminPw'); if(el) el.focus(); }, 100);
+}
+
+function adminLogin() {
+  const pw = document.getElementById('adminPw').value;
+  if (pw === ADMIN_PASS) { closeConfirm(); showAdminResults(); }
+  else showToast('Wrong password · 密码错误');
+}
+
 async function showAdminResults() {
-  allVotes = await dbGet('votes');
-  // Deduplicate by voter - keep latest submission per voter per round
-  const dedup = (votes) => {
-    const map = {};
-    votes.forEach(v => { map[v.voter] = v; }); // later entries overwrite earlier
-    return Object.values(map);
-  };
-  const r1Votes = dedup(allVotes.filter(v=>v.round===1));
-  const r2Votes = dedup(allVotes.filter(v=>v.round===2));
-  const r1Done = r1Votes.length;
-  const r2Done = r2Votes.length;
-  finalists = calcTop5(r1Votes);
+  allVotes = await dbGet();
+  const r1Votes = dedup(allVotes.filter(v => v.round===1));
+  const r2Votes = dedup(allVotes.filter(v => v.round===2));
+  const top5 = calcTop5(allVotes.filter(v => v.round===1));
 
-  // R1 counts
   const counts = {};
-  FUNDS.forEach(f=>counts[f.name]=0);
-  r1Votes.forEach(v=>v.picks.forEach(n=>{ if(counts[n]!==undefined) counts[n]++; })); // already deduped
-  const r1Ranked = Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([name,count])=>({name,count}));
+  FUNDS.forEach(f => counts[f.name] = 0);
+  r1Votes.forEach(v => v.picks.forEach(n => { if(counts[n]!==undefined) counts[n]++; }));
+  const r1Ranked = Object.entries(counts).sort((a,b) => b[1]-a[1]).map(([name,count]) => ({name,count}));
 
-  // R2 scores
   const scores = {};
-  finalists.forEach(f=>scores[f]=0);
-  r2Votes.forEach(v=>v.picks.forEach((name,i)=>{ if(scores[name]!==undefined) scores[name]+=R2_PTS[i]; }));
-  const r2Ranked = Object.entries(scores).sort((a,b)=>b[1]-a[1]).map(([name,score])=>({name,score}));
+  top5.forEach(f => scores[f] = 0);
+  r2Votes.forEach(v => v.picks.forEach((name,i) => { if(scores[name]!==undefined) scores[name]+=R2_PTS[i]; }));
+  const r2Ranked = Object.entries(scores).sort((a,b) => b[1]-a[1]).map(([name,score]) => ({name,score}));
 
-  const r1Rows = r1Ranked.map((r,i)=>`
+  const r1Rows = r1Ranked.map((r,i) => `
     <div class="result-row ${i<5?'finalist':''}">
       <div class="result-rank">${String(i+1).padStart(2,'0')}</div>
       <div class="result-name">${r.name}</div>
@@ -573,87 +578,45 @@ async function showAdminResults() {
       ${i<5?'<div class="finalist-badge">FINALIST</div>':''}
     </div>`).join('');
 
-  const r2Section = r2Done > 0 ? `
+  const r2Section = r2Votes.length > 0 ? `
     <hr class="divider">
-    <div class="card-title">Round 2 Results · 决赛结果 (${r2Done}/${VOTERS.length})</div>
-    ${r2Done===VOTERS.length ? `
-    <div class="winners-grid">
-      ${r2Ranked.slice(0,3).map((r,i)=>`
-        <div class="winner-card w${i+1}">
-          <div class="winner-label">${['🏆 Winner · 第一名','Runner-up · 第二名','Third · 第三名'][i]}</div>
-          <div class="winner-name">${r.name}</div>
-          <div class="winner-votes">${r.score} points</div>
-        </div>`).join('')}
-    </div>` : ''}
-    <div class="results-list" style="margin-top:12px">
-      ${r2Ranked.map((r,i)=>`
-        <div class="result-row ${i<3?'finalist':''}">
-          <div class="result-rank">${String(i+1).padStart(2,'0')}</div>
-          <div class="result-name">${r.name}</div>
-          <div class="result-bar-wrap"><div class="result-bar" style="width:${r2Ranked[0].score?r.score/r2Ranked[0].score*100:0}%"></div></div>
-          <div class="result-score">${r.score} pts</div>
-          ${i<3?'<div class="finalist-badge">TOP 3</div>':''}
-        </div>`).join('')}
-    </div>` : '';
+    <div class="card-title">Round 2 Results · 决赛结果 (${r2Votes.length}/${VOTERS.length})</div>
+    ${r2Votes.length===VOTERS.length?`<div class="winners-grid">${r2Ranked.slice(0,3).map((r,i)=>`
+      <div class="winner-card w${i+1}">
+        <div class="winner-label">${['🏆 Winner · 第一名','Runner-up · 第二名','Third · 第三名'][i]}</div>
+        <div class="winner-name">${r.name}</div>
+        <div class="winner-votes">${r.score} points</div>
+      </div>`).join('')}</div>`:''}
+    <div class="results-list" style="margin-top:12px">${r2Ranked.map((r,i)=>`
+      <div class="result-row ${i<3?'finalist':''}">
+        <div class="result-rank">${String(i+1).padStart(2,'0')}</div>
+        <div class="result-name">${r.name}</div>
+        <div class="result-bar-wrap"><div class="result-bar" style="width:${r2Ranked[0].score?r.score/r2Ranked[0].score*100:0}%"></div></div>
+        <div class="result-score">${r.score} pts</div>
+        ${i<3?'<div class="finalist-badge">TOP 3</div>':''}
+      </div>`).join('')}` : '';
 
-  const canStartR2 = r1Done === VOTERS.length;
-
+  updateTabs(r2Votes.length===VOTERS.length?4:r1Votes.length===VOTERS.length?2:1);
   document.getElementById('app').innerHTML = `<div class="fade-in">
     <div class="card">
       <div class="card-title">Admin Panel · 管理员面板</div>
-      <div style="font-size:11px;color:var(--muted);line-height:2;margin-bottom:16px">
-        Round 1: <span style="color:var(--accent)">${r1Done} / ${VOTERS.length}</span> submitted<br>
-        Round 2: <span style="color:var(--accent)">${r2Done} / ${VOTERS.length}</span> submitted
+      <div style="font-size:13px;color:#b8b4ae;line-height:2.2;margin-bottom:20px">
+        Round 1: <span style="color:var(--accent);font-weight:500">${r1Votes.length} / ${VOTERS.length}</span> submitted<br>
+        Round 2: <span style="color:var(--accent);font-weight:500">${r2Votes.length} / ${VOTERS.length}</span> submitted
       </div>
       <div class="card-title">Round 1 Vote Counts · 第一轮票数</div>
       <div class="results-list">${r1Rows}</div>
       ${r2Section}
-      <div class="btn-row" style="margin-top:24px">
-        <button class="btn-outline" onclick="init()">← Back · 返回</button>
-        ${canStartR2 && r2Done===0 ? `<button class="btn" onclick="openR2ForAll()">Open Round 2 · 开启第二轮</button>` : ''}
+      </div>
+      <div class="btn-row" style="margin-top:0">
+        <button class="btn-outline" onclick="renderHome()">← Back · 返回</button>
+        <button class="btn-outline" onclick="showAdminResults()">↻ Refresh · 刷新</button>
       </div>
     </div>
   </div>`;
-  updateTabs(r2Done===VOTERS.length?4:r1Done===VOTERS.length?2:1);
 }
 
-async function openR2ForAll() {
-  showToast('Round 2 is now open! Share the link again. · 第二轮已开启！通知大家重新打开链接投票。');
-  await showAdminResults();
-}
-
-// ── HELPERS ──────────────────────────────────────────────
-function calcTop5(r1Votes) {
-  // Deduplicate by voter first
-  const map = {};
-  r1Votes.forEach(v => { map[v.voter] = v; });
-  const unique = Object.values(map);
-  const counts = {};
-  FUNDS.forEach(f=>counts[f.name]=0);
-  unique.forEach(v=>v.picks.forEach(n=>{ if(counts[n]!==undefined) counts[n]++; }));
-  return Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([name])=>name);
-}
-
-function updateTabs(activeIdx) {
-  // 0=select,1=r1,2=r1results,3=r2,4=final
-  const map = {1:[0],2:[0,1],3:[0,1,2],4:[0,1,2,3]};
-  ['pt1','pt2','pt3','pt4'].forEach((id,i)=>{
-    document.getElementById(id).className = 'phase-item' + (i+1===activeIdx?' active':i<(activeIdx-1)?' done':'');
-  });
-}
-
-function closeConfirm() {
-  document.getElementById('confirmOverlay').style.display='none';
-  pendingSubmit = null;
-}
-
-function confirmSubmit() {
-  if (pendingSubmit==='r1') submitR1();
-  else if (pendingSubmit==='r2') submitR2();
-  else if (pendingSubmit==='admin') adminLogin();
-}
-
-init();
+boot();
 </script>
 </body>
 </html>
