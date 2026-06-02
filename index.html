@@ -279,8 +279,8 @@ function showToast(msg) {
 // ── VOTER SELECT ─────────────────────────────────────────
 function renderVoterSelect() {
   updateTabs(0);
-  const r1Done = allVotes.filter(v=>v.round===1).map(v=>v.voter);
-  const r2Done = allVotes.filter(v=>v.round===2).map(v=>v.voter);
+  const r1Done = [...new Set(allVotes.filter(v=>v.round===1).map(v=>v.voter))];
+  const r2Done = [...new Set(allVotes.filter(v=>v.round===2).map(v=>v.voter))];
 
   const btns = VOTERS.map(v=>{
     const hasR1 = r1Done.includes(v);
