@@ -337,7 +337,7 @@ async function selectVoter(name) {
   currentVoter = name;
   const myR1 = allVotes.find(v=>v.voter===name && v.round===1);
   const myR2 = allVotes.find(v=>v.voter===name && v.round===2);
-  const r1AllDone = allVotes.filter(v=>v.round===1).length === VOTERS.length;
+  const r1AllDone = [...new Set(allVotes.filter(v=>v.round===1).map(v=>v.voter))].length === VOTERS.length;
 
   // Round 2: allow re-vote before deadline
   if (myR2) {
@@ -547,8 +547,14 @@ async function submitR2() {
 // ── ADMIN RESULTS ─────────────────────────────────────────
 async function showAdminResults() {
   allVotes = await dbGet('votes');
-  const r1Votes = allVotes.filter(v=>v.round===1);
-  const r2Votes = allVotes.filter(v=>v.round===2);
+  // Deduplicate by voter - keep latest submission per voter per round
+  const dedup = (votes) => {
+    const map = {};
+    votes.forEach(v => { map[v.voter] = v; }); // later entries overwrite earlier
+    return Object.values(map);
+  };
+  const r1Votes = dedup(allVotes.filter(v=>v.round===1));
+  const r2Votes = dedup(allVotes.filter(v=>v.round===2));
   const r1Done = r1Votes.length;
   const r2Done = r2Votes.length;
   finalists = calcTop5(r1Votes);
@@ -556,7 +562,7 @@ async function showAdminResults() {
   // R1 counts
   const counts = {};
   FUNDS.forEach(f=>counts[f.name]=0);
-  r1Votes.forEach(v=>v.picks.forEach(n=>{ if(counts[n]!==undefined) counts[n]++; }));
+  r1Votes.forEach(v=>v.picks.forEach(n=>{ if(counts[n]!==undefined) counts[n]++; })); // already deduped
   const r1Ranked = Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([name,count])=>({name,count}));
 
   // R2 scores
@@ -625,9 +631,13 @@ async function openR2ForAll() {
 
 // ── HELPERS ──────────────────────────────────────────────
 function calcTop5(r1Votes) {
+  // Deduplicate by voter first
+  const map = {};
+  r1Votes.forEach(v => { map[v.voter] = v; });
+  const unique = Object.values(map);
   const counts = {};
   FUNDS.forEach(f=>counts[f.name]=0);
-  r1Votes.forEach(v=>v.picks.forEach(n=>{ if(counts[n]!==undefined) counts[n]++; }));
+  unique.forEach(v=>v.picks.forEach(n=>{ if(counts[n]!==undefined) counts[n]++; }));
   return Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([name])=>name);
 }
 
