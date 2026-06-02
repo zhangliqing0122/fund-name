@@ -356,12 +356,12 @@ function showSubmitted(round) {
 
 function editVote(round) {
   if (round === 1) {
-    const myR1 = allVotes.find(v => v.voter===currentVoter && v.round===1);
-    myR1Picks = myR1 ? [...myR1.picks] : [];
+    myR1Picks = []; // start fresh, don't show previous picks
+    expanded = {};
     renderR1();
   } else {
-    const myR2 = allVotes.find(v => v.voter===currentVoter && v.round===2);
-    myR2Picks = myR2 ? [...myR2.picks] : [];
+    myR2Picks = []; // start fresh, don't show previous picks
+    expanded = {};
     renderR2();
   }
 }
