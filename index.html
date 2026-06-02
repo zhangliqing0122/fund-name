@@ -569,6 +569,20 @@ async function showAdminResults() {
   r2Votes.forEach(v => v.picks.forEach((name,i) => { if(scores[name]!==undefined) scores[name]+=R2_PTS[i]; }));
   const r2Ranked = Object.entries(scores).sort((a,b) => b[1]-a[1]).map(([name,score]) => ({name,score}));
 
+  // Individual voter picks for R1
+  const r1IndividualRows = VOTERS.map(voter => {
+    const v = r1Votes.find(v => v.voter === voter);
+    const picks = v ? v.picks : null;
+    return `<div style="padding:12px 16px;border:1px solid var(--border);border-radius:3px;display:flex;align-items:flex-start;gap:16px">
+      <div style="font-size:12px;color:var(--accent);width:56px;flex-shrink:0;padding-top:2px">${voter}</div>
+      ${picks ? `<div style="display:flex;flex-wrap:wrap;gap:6px">${picks.map((name,i)=>`
+        <span style="font-size:11px;padding:3px 10px;border:1px solid var(--border);border-radius:20px;color:#c8c4bc">
+          ${name}
+        </span>`).join('')}</div>`
+      : `<div style="font-size:11px;color:var(--muted);font-style:italic">Not submitted yet · 未提交</div>`}
+    </div>`;
+  }).join('');
+
   const r1Rows = r1Ranked.map((r,i) => `
     <div class="result-row ${i<5?'finalist':''}">
       <div class="result-rank">${String(i+1).padStart(2,'0')}</div>
@@ -578,8 +592,24 @@ async function showAdminResults() {
       ${i<5?'<div class="finalist-badge">FINALIST</div>':''}
     </div>`).join('');
 
+  // Individual voter picks for R2
+  const r2IndividualRows = VOTERS.map(voter => {
+    const v = r2Votes.find(v => v.voter === voter);
+    const picks = v ? v.picks : null;
+    return `<div style="padding:12px 16px;border:1px solid var(--border);border-radius:3px;display:flex;align-items:flex-start;gap:16px">
+      <div style="font-size:12px;color:var(--accent);width:56px;flex-shrink:0;padding-top:2px">${voter}</div>
+      ${picks ? `<div style="display:flex;flex-wrap:wrap;gap:6px">${picks.map((name,i)=>`
+        <span style="font-size:11px;padding:3px 10px;border:1px solid var(--border);border-radius:20px;color:#c8c4bc">
+          #${i+1} ${name}
+        </span>`).join('')}</div>`
+      : `<div style="font-size:11px;color:var(--muted);font-style:italic">Not submitted yet · 未提交</div>`}
+    </div>`;
+  }).join('');
+
   const r2Section = r2Votes.length > 0 ? `
     <hr class="divider">
+    <div class="card-title">Round 2 Individual Rankings · 各成员排序</div>
+    <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:24px">${r2IndividualRows}</div>
     <div class="card-title">Round 2 Results · 决赛结果 (${r2Votes.length}/${VOTERS.length})</div>
     ${r2Votes.length===VOTERS.length?`<div class="winners-grid">${r2Ranked.slice(0,3).map((r,i)=>`
       <div class="winner-card w${i+1}">
@@ -604,7 +634,9 @@ async function showAdminResults() {
         Round 1: <span style="color:var(--accent);font-weight:500">${r1Votes.length} / ${VOTERS.length}</span> submitted<br>
         Round 2: <span style="color:var(--accent);font-weight:500">${r2Votes.length} / ${VOTERS.length}</span> submitted
       </div>
-      <div class="card-title">Round 1 Vote Counts · 第一轮票数</div>
+      <div class="card-title">Round 1 Individual Picks · 各成员选择</div>
+      <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:24px">${r1IndividualRows}</div>
+      <div class="card-title">Round 1 Vote Counts · 第一轮票数统计</div>
       <div class="results-list">${r1Rows}</div>
       ${r2Section}
       </div>
