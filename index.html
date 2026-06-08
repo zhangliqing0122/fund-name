@@ -132,7 +132,7 @@ h1 em{font-style:italic;color:var(--accent);}
       <div class="rule-item"><div class="rule-num">1</div><div class="rule-text"><strong>Round 1 · 初轮筛选</strong>Each voter picks 5 favorites from 17 names. The 5 names chosen by the most voters advance.<span class="zh">每人从17个名字中选出最喜欢的5个。被最多人选中的Top 5进入决赛。</span></div></div>
       <div class="rule-item"><div class="rule-num">2</div><div class="rule-text"><strong>Round 2 · 决赛积分</strong>Rank all 5 finalists. #1=5pts, #2=4pts, #3=3pts, #4=2pts, #5=1pt. Top 3 win.<span class="zh">对Top 5全部排序。#1=5分到#5=1分，积分最高的3个胜出。</span></div></div>
       <div class="rule-item"><div class="rule-num">3</div><div class="rule-text"><strong>Rationale · 查看理由</strong>Click ▾ on any name to read its rationale in English and Chinese.<span class="zh">点击名字右侧 ▾ 展开查看中英文解释，投票前建议仔细阅读。</span></div></div>
-      <div class="rule-item"><div class="rule-num">4</div><div class="rule-text"><strong>Deadlines · 截止时间（北京时间）</strong>Round 1: Wednesday 18:00 CST · Round 2: Friday 18:00 CST<span class="zh">第一轮：周三18:00前 · 第二轮：周五18:00前</span></div></div>
+      <div class="rule-item"><div class="rule-num">4</div><div class="rule-text"><strong>Editable Anytime · 随时可修改</strong>You can update your vote at any time before results are finalized.<span class="zh">在结果公布前，你可以随时修改你的投票选择。</span></div></div>
     </div>
   </div>
   <div class="phase-bar">
@@ -164,8 +164,7 @@ const ADMIN_PASS = 'fundvote2026';
 const VOTERS = ["John","Emma","Jack","Will","Nemo","Stella"];
 const R1_PICK = 5;
 const R2_PTS = [5,4,3,2,1];
-const R1_DEADLINE = new Date("2026-06-04T10:00:00Z");
-const R2_DEADLINE = new Date("2026-06-06T10:00:00Z");
+
 
 const FUNDS = [
   {name:"Sea Cliff Ventures",en:"Sea Cliff is a neighborhood in San Francisco. (Soma Capital, South Park Commons, Presidio Ventures) Sea Cliff Ventures is a good name if the fund wants to signal frontier investing, SF roots, taste, discretion, and long-term conviction. It is less good if the brand wants to feel scrappy, populist, developer-native, or aggressively technical.",zh:"Sea Cliff 是旧金山的一个高档社区。如果基金希望传递前沿投资、扎根旧金山、品味独到、低调审慎和长期信念等气质，Sea Cliff Ventures 是一个好名字。但如果品牌想显得草根接地气、平民化、开发者原生或技术强硬派，这个名字则不太适合。"},
@@ -333,8 +332,7 @@ async function selectVoter(name) {
 function showSubmitted(round) {
   updateTabs(round === 1 ? 1 : 3);
   const r1AllDone = [...new Set(allVotes.filter(v=>v.round===1).map(v=>v.voter))].length === VOTERS.length;
-  const deadline = round === 1 ? 'Wednesday 18:00 CST · 周三18:00前' : 'Friday 18:00 CST · 周五18:00前';
-  const canEdit = round === 1 ? new Date() < R1_DEADLINE : new Date() < R2_DEADLINE;
+  const canEdit = true;
   const r2Ready = round === 1 && r1AllDone;
 
   document.getElementById('app').innerHTML = `<div class="fade-in">
@@ -343,7 +341,7 @@ function showSubmitted(round) {
       <div class="card-title" style="justify-content:center;text-align:center">${currentVoter} · Round ${round} Submitted · 已提交</div>
       <div style="font-size:13px;color:#b8b4ae;line-height:1.9;margin:16px 0;text-align:center">
         Your vote has been saved · 你的投票已保存<br>
-        ${canEdit ? `<span style="color:var(--accent)">Can update before ${deadline}</span>` : `<span style="color:var(--muted)">Deadline has passed · 截止时间已过</span>`}
+        <span style="color:var(--accent)">You can update your vote anytime · 可随时修改</span>
       </div>
       ${r2Ready ? `<div style="font-size:12px;color:var(--accent2);margin:12px 0;text-align:center">🎉 All members voted! Round 2 is now open · 所有人已投票，第二轮已开启</div>` : ''}
       <div class="btn-row" style="justify-content:center;gap:16px;margin-top:24px">
@@ -399,7 +397,7 @@ function renderR1() {
       <div class="instructions">
         Click a name to select/deselect · 点击名字选择或取消<br>
         Click <strong>▾</strong> to read rationale · 点击 <strong>▾</strong> 查看理由<br>
-        <span class="zh">已选 <strong>${myR1Picks.length} / ${R1_PICK}</strong> 个 &nbsp;·&nbsp; Deadline: Wednesday 18:00 CST · 周三18:00前</span>
+        <span class="zh">已选 <strong>${myR1Picks.length} / ${R1_PICK}</strong> 个</span>
       </div>
       <div class="names-list">${names}</div>
       <div class="btn-row">
@@ -422,7 +420,7 @@ function handleR1Click(e, name, idx) {
 
 function showConfirmR1() {
   document.getElementById('confirmTitle').textContent = `${currentVoter} — Confirm Vote · 确认投票`;
-  document.getElementById('confirmSub').innerHTML = `You can update anytime before Wednesday 18:00 CST.<br><span style="color:var(--muted);font-size:10px">截止时间（周三18:00北京时间）前可随时修改。</span>`;
+  document.getElementById('confirmSub').innerHTML = `You can update your vote anytime.<br><span style="color:var(--muted);font-size:10px">可随时修改你的选择。</span>`;
   document.getElementById('confirmPicks').innerHTML = myR1Picks.map((name,i) => `
     <div class="confirm-pick">
       <div style="width:22px;height:22px;border-radius:50%;background:var(--accent);color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0">${i+1}</div>
@@ -479,7 +477,7 @@ function renderR2() {
       <div class="instructions">
         Click names in order of preference · <strong>#1=5pts · #2=4pts · #3=3pts · #4=2pts · #5=1pt</strong><br>
         Click <strong>▾</strong> to read rationale · 查看理由<br>
-        <span class="zh">已排序：<strong>${myR2Picks.length} / ${finalists.length}</strong> 个 &nbsp;·&nbsp; Deadline: Friday 18:00 CST · 周五18:00前</span>
+        <span class="zh">已排序：<strong>${myR2Picks.length} / ${finalists.length}</strong> 个</span>
       </div>
       <div class="finalist-list">${cards}</div>
       <div class="btn-row">
@@ -503,7 +501,7 @@ function handleR2Click(e, name, idx) {
 function showConfirmR2() {
   const colors = ['var(--r1)','var(--r2)','var(--r3)','var(--r4)','var(--r5)'];
   document.getElementById('confirmTitle').textContent = `${currentVoter} — Final Vote · 确认决赛投票`;
-  document.getElementById('confirmSub').innerHTML = `You can update anytime before Friday 18:00 CST.<br><span style="color:var(--muted);font-size:10px">截止时间（周五18:00北京时间）前可随时修改。</span>`;
+  document.getElementById('confirmSub').innerHTML = `You can update your ranking anytime.<br><span style="color:var(--muted);font-size:10px">可随时修改你的排序。</span>`;
   document.getElementById('confirmPicks').innerHTML = myR2Picks.map((name,i) => `
     <div class="confirm-pick">
       <div style="width:22px;height:22px;border-radius:50%;background:${colors[i]};color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0">${i+1}</div>
